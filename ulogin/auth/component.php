@@ -26,7 +26,7 @@ if (!empty($_POST['token'])) {
     $arResult['USER']['PHOTO_BIG'] = $profile['photo_big'];
     $arResult['USER']['NETWORK'] = $profile['network'];
 
-    // РїСЂРѕРІРµСЂСЏРµРј РµСЃС‚СЊ Р»Рё РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ РІ Р‘Р”.	Р•СЃР»Рё РµСЃС‚СЊ - С‚Рѕ Р°РІС‚РѕСЂРёР·СѓРµРј, РЅРµС‚  - СЂРµРіРёСЃС‚СЂРёСЂСѓРµРј Рё Р°РІС‚РѕСЂРёР·СѓРµРј
+    // проверяем есть ли пользователь в БД.	Если есть - то авторизуем, нет  - регистрируем и авторизуем
     $rsUsers = CUser::GetList(
         ($by = "email"),
         ($order = "desc"),
@@ -39,7 +39,7 @@ if (!empty($_POST['token'])) {
 
     if ($arUser["EXTERNAL_AUTH_ID"] == $arResult['USER']["EXTERNAL_AUTH_ID"]) {
 
-        // С‚Р°РєРѕР№ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ РµСЃС‚СЊ, Р°РІС‚РѕСЂРёР·СѓРµРј РµРіРѕ
+        // такой пользователь есть, авторизуем его
         $USER->Authorize($arUser["ID"]);
 
         if ($arParams["REDIRECT_PAGE"] != "")
@@ -49,20 +49,21 @@ if (!empty($_POST['token'])) {
 
     }
     else {
-        // СЂРµРіРёСЃС‚СЂРёСЂСѓРµРј РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ, Рё РґРѕР±Р°РІР»СЏРµРј РµРіРѕ РІ РіСЂСѓРїРїС‹, СѓРєР°Р·Р°РЅРЅС‹Рµ РІ РїР°СЂР°РјРµС‚СЂР°С…
+        // регистрируем пользователя, и добавляем его в группы, указанные в параметрах
         $user = new CUser;
-        $GroupID = "2";
+        $GroupID = "5";
         $passw = rand(1000000,10000000);
 
 
 
         if (is_array($arParams["GROUP_ID"]))
             $GroupID = $arParams["GROUP_ID"];
+	if (!is_array($GroupID)) $GroupID=array($GroupID);
 
         if (!$arResult['USER']["EMAIL"])
             $arResult['USER']["EMAIL"] = "yourmail@domain.com";
 
-        # РїСЂРѕРІРµСЂСЏРµРј РµСЃС‚СЊ Р»Рё С‚Р°РєРѕР№ Р»РѕРіРёРЅ
+        # проверяем есть ли такой логин
         $rsUsers = CUser::GetList(
             ($by = "email"),
             ($order = "desc"),
