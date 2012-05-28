@@ -3,22 +3,22 @@
 $arComponentParameters = array(
     'PARAMETERS' => array(
         'PROVIDERS' => array(
-            'NAME' => 'РџСЂРѕРІР°Р№РґРµСЂС‹',
+            'NAME' => 'Провайдеры',
             'TYPE' => 'STRING',
             'MULTIPLE' => 'N',
             'DEFAULT' => 'vkontakte,odnoklassniki,mailru,facebook',
             'PARENT' => 'BASE',
         ),
         'HIDDEN' => array(
-            'NAME' => 'РЎРєСЂС‹С‚С‹Рµ РїСЂРѕРІР°Р№РґРµСЂС‹',
+            'NAME' => 'Скрытые провайдеры',
             'TYPE' => 'STRING',
             'MULTIPLE' => 'N',
-            'DEFAULT' => 'twitter,google,yandex,livejournal,openid',
+            'DEFAULT' => 'other',
             'PARENT' => 'BASE',
         ),
         "TYPE" => Array(
             "PARENT" => "BASE",
-            "NAME" => 'РўРёРї',
+            "NAME" => 'Тип',
             "TYPE" => "LIST",
             "VALUES" => array('small' => 'small', 'panel' => 'panel'),
             "DEFAULT" => 'panel',
@@ -26,11 +26,23 @@ $arComponentParameters = array(
             "REFRESH" => "Y",
         ),
         "REDIRECT_PAGE" => array(
-            'NAME' => 'РЎС‚СЂР°РЅРёС†Р° СЂРµРґРёСЂРµРєС‚Р° РїРѕСЃР»Рµ Р»РѕРіРёРЅР°',
+            'NAME' => 'Страница редиректа после логина',
             'TYPE' => 'STRING',
             'MULTIPLE' => 'N',
             'PARENT' => 'BASE',
-        )
+        ),
+        "UNIQUE_EMAIL" => array(
+	  'NAME' => 'Регистрировать пользователей с уникальными email',
+	  'TYPE' => 'CHECKBOX',
+	  'PARENT' => 'BASE',
+	  'DEFAULT' => 'N'
+	),
+	"SEND_MAIL" => array(
+	  'NAME' => 'Отправлять email администратору при регистрации пользователя',
+	  'TYPE' => 'CHECKBOX',
+	  'PARENT' => 'BASE',
+	  'DEFAULT' => 'N'
+	)
     ),
 );
 ?>

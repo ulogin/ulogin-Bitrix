@@ -36,6 +36,22 @@ if (!empty($_POST['token'])) {
         )
     );
     $arUser = $rsUsers->GetNext();
+    
+    $emailExist = false;
+    // проверка уникальности email 
+    if ($arParams['UNIQUE_EMAIL'] == 'Y'){
+      $emailUsers = CUser::GetList(
+	($by = "id"),
+	($order = "desc"),
+	array(
+	  "EMAIL" => $arResult['USER']["EMAIL"],
+	  "ACTIVE" => "Y"
+	)
+      );
+      if (intval($emailUsers->SelectedRowsCount()) > 0){
+	$emailExist = true;
+      }
+    }
 
     if ($arUser["EXTERNAL_AUTH_ID"] == $arResult['USER']["EXTERNAL_AUTH_ID"]) {
 
@@ -48,13 +64,11 @@ if (!empty($_POST['token'])) {
             LocalRedirect($APPLICATION->GetCurPageParam("", array("logout")));
 
     }
-    else {
+    else if (!$emailExist){
         // регистрируем пользователя, и добавляем его в группы, указанные в параметрах
         $user = new CUser;
         $GroupID = "5";
         $passw = rand(1000000,10000000);
-
-
 
         if (is_array($arParams["GROUP_ID"]))
             $GroupID = $arParams["GROUP_ID"];
@@ -92,7 +106,7 @@ if (!empty($_POST['token'])) {
         $arIMAGE = CFile::MakeFileArray($tmpName);
         $arIMAGE["MODULE_ID"] = "main";
 
-
+	
         $arFields = Array(
             "NAME" => $arResult['USER']['NAME'],
             "LAST_NAME" => $arResult['USER']['LAST_NAME'],
@@ -110,7 +124,20 @@ if (!empty($_POST['token'])) {
         );
 
         $UserID = $user->Add($arFields);
-
+	if ($UserID && $arParams['SEND_EMAIL'] == 'Y'){
+	  $arEventFields = array(
+	    'USER_ID' => $UserID,
+	    'LOGIN' => $arFields['LOGIN'],
+	    'EMAIL' => $arFields['EMAIL'],
+	    'NAME' => $arFields['NAME'],
+	    'LAST_NAME' => $arFields['LAST_NAME'],
+	    'USER_IP'  => '',
+	    'USER_HOST'  => ''
+	  );
+	  $event = new CEvent;
+	  $msg = $event->SendImmediate("NEW_USER", SITE_ID, $arEventFields);
+	  ShowMessage($msg);
+	}
         unlink($tmpName);
 
         if (intval($UserID) > 0) {
