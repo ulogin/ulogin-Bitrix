@@ -2,8 +2,8 @@
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 
 $arComponentDescription = array(
-    "NAME" => 'Ulogin',
-    "DESCRIPTION" => GetMessage("TALKHARD_ULOGIN_REGISTRACIA_CEREZ_SO"),
+    "NAME" => 'Ulogin_sync',
+    "DESCRIPTION" => GetMessage("TALKHARD_ULOGIN_SYNC_DESC"),
     "ICON" => "/images/icon.gif",
     "CACHE_PATH" => "Y",
     "PATH" => array(

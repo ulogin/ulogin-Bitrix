@@ -25,30 +25,6 @@ $arComponentParameters = array(
             "ADDITIONAL_VALUES" => "N",
             "REFRESH" => "Y",
         ),
-        "REDIRECT_PAGE" => array(
-            'NAME' => GetMessage("TALKHARD_ULOGIN_STRANICA_REDIREKTA_P"),
-            'TYPE' => 'STRING',
-            'MULTIPLE' => 'N',
-            'PARENT' => 'BASE',
-        ),
-        "UNIQUE_EMAIL" => array(
-	  'NAME' => GetMessage("TALKHARD_ULOGIN_REGISTRIROVATQ_POLQZ").' email',
-	  'TYPE' => 'CHECKBOX',
-	  'PARENT' => 'BASE',
-	  'DEFAULT' => 'N'
-	),
-	"SEND_MAIL" => array(
-	  'NAME' => GetMessage("TALKHARD_ULOGIN_OTPRAVLATQ").' email '.GetMessage("TALKHARD_ULOGIN_ADMINISTRATORU_PRI_R"),
-	  'TYPE' => 'CHECKBOX',
-	  'PARENT' => 'BASE',
-	  'DEFAULT' => 'N'
-	),
-    "SYNC_ULOGIN" => array(
-        'NAME' => GetMessage("TALKHARD_ULOGIN_SYNC").' uLogin',
-        'TYPE' => 'CHECKBOX',
-        'PARENT' => 'BASE',
-        'DEFAULT' => 'N'
-    )
     ),
 );
 ?>

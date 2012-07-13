@@ -8,7 +8,7 @@ $arResult = $arParams;
 global $USER;
 global $APPLICATION;
 
-if (!empty($_POST['token'])) {
+if (!empty($_POST['token']) && !$USER->isAuthorized()) {
     $s = file_get_contents('http://ulogin.ru/token.php?token=' . $_POST['token'] . '&host=' . $_SERVER['HTTP_HOST']);
     $profile = json_decode($s, true);
 
@@ -25,14 +25,12 @@ if (!empty($_POST['token'])) {
     $arResult['USER']['PHOTO'] = $profile['photo'];
     $arResult['USER']['PHOTO_BIG'] = $profile['photo_big'];
     $arResult['USER']['NETWORK'] = $profile['network'];
-
     // проверяем есть ли пользователь в БД.	Если есть - то авторизуем, нет  - регистрируем и авторизуем
     $rsUsers = CUser::GetList(
         ($by = "email"),
         ($order = "desc"),
         array(
             "EXTERNAL_AUTH_ID" => $arResult['USER']["EXTERNAL_AUTH_ID"],
-            "ACTIVE" => "Y"
         )
     );
     $arUser = $rsUsers->GetNext();
@@ -41,30 +39,39 @@ if (!empty($_POST['token'])) {
     // проверка уникальности email 
     if ($arParams['UNIQUE_EMAIL'] == 'Y'){
       $emailUsers = CUser::GetList(
-	($by = "id"),
-	($order = "desc"),
-	array(
-	  "EMAIL" => $arResult['USER']["EMAIL"],
-	  "ACTIVE" => "Y"
-	)
-      );
+	                        ($by = "id"),
+	                        ($order = "desc"),
+	                        array(
+                              "EMAIL" => $arResult['USER']["EMAIL"],
+                              "ACTIVE" => "Y"
+	                        )
+                    );
       if (intval($emailUsers->SelectedRowsCount()) > 0){
-	$emailExist = true;
+        $emailExist = true;
       }
     }
 
     if ($arUser["EXTERNAL_AUTH_ID"] == $arResult['USER']["EXTERNAL_AUTH_ID"]) {
 
-        // такой пользователь есть, авторизуем его
-        $USER->Authorize($arUser["ID"]);
+        // такой пользователь есть, авторизуем пользователя
+
+        $ID_INFO = explode('=',$arUser['ADMIN_NOTES']);
+
+        if ($arResult['USER']['NETWORK'] == $ID_INFO[0] && $arUser['ACTIVE'] == 'Y'){//старый формат хранения аккаунтов, конвертируем
+
+            $USER->Update($arUser['ID'], array('EXTERNAL_AUTH_ID'=>''));
+            Ulogin::createUloginAccount($arResult['USER'], $arUser['ID']);
+            $ID_INFO[1] = $arUser['ID'];
+        }
+
+        $USER->Authorize($ID_INFO[1]);
 
         if ($arParams["REDIRECT_PAGE"] != "")
             LocalRedirect($arParams["REDIRECT_PAGE"]);
         else
             LocalRedirect($APPLICATION->GetCurPageParam("", array("logout")));
 
-    }
-    else if (!$emailExist){
+    }else if (!$emailExist){
         // регистрируем пользователя, и добавляем его в группы, указанные в параметрах
         $user = new CUser;
         $GroupID = "5";
@@ -117,7 +124,6 @@ if (!empty($_POST['token'])) {
             "PERSONAL_BIRTHDAY" => $arResult['USER']['PERSONAL_BIRTHDAY'],
             "ACTIVE" => "Y",
             "GROUP_ID" => $GroupID,
-            "EXTERNAL_AUTH_ID" => $arResult['USER']["EXTERNAL_AUTH_ID"],
             "PASSWORD" => $passw,
             "CONFIRM_PASSWORD" => $passw,
             "PERSONAL_PHOTO"    => $arIMAGE,
@@ -137,10 +143,13 @@ if (!empty($_POST['token'])) {
 	  $event = new CEvent;
 	  $msg = $event->SendImmediate("NEW_USER", SITE_ID, $arEventFields);
 	  ShowMessage($msg);
+
 	}
         unlink($tmpName);
 
         if (intval($UserID) > 0) {
+            $arFields['EXTERNAL_AUTH_ID'] = $arResult['USER']["EXTERNAL_AUTH_ID"];
+            Ulogin::createUloginAccount($arResult['USER'], $UserID);
             $USER->Authorize($UserID);
 
             if ($arParams["REDIRECT_PAGE"] != "")
