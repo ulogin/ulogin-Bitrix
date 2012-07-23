@@ -8,4 +8,5 @@ $MESS["TALKHARD_ULOGIN_REGISTRIROVATQ_POLQZ"] = "Регистрировать пользователей с 
 $MESS["TALKHARD_ULOGIN_OTPRAVLATQ"] = "Отправлять";
 $MESS["TALKHARD_ULOGIN_ADMINISTRATORU_PRI_R"] = "администратору при регистрации пользователя";
 $MESS["TALKHARD_ULOGIN_SYNC"] = "Панель для привязки аккаунтов";
+$MESS["TALKHARD_ULOGIN_GROUPS_MESSAGE"] = "При регистрации добавлять пользователя в группу";
 ?>

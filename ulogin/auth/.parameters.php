@@ -1,5 +1,12 @@
 <? if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 
+$group_list = CGroup::GetList(($by = "id"), ($order = "asc"), array("ACTIVE" => "Y"));
+$groups = array();
+
+while($group =  $group_list->GetNext()){
+    $groups[$group['ID']] = $group['NAME'];
+}
+
 $arComponentParameters = array(
     'PARAMETERS' => array(
         'PROVIDERS' => array(
@@ -43,11 +50,13 @@ $arComponentParameters = array(
 	  'PARENT' => 'BASE',
 	  'DEFAULT' => 'N'
 	),
-    "SYNC_ULOGIN" => array(
-        'NAME' => GetMessage("TALKHARD_ULOGIN_SYNC").' uLogin',
-        'TYPE' => 'CHECKBOX',
+    "GROUP_ID" => array(
+        'NAME' => GetMessage("TALKHARD_ULOGIN_GROUPS_MESSAGE"),
+        'TYPE' => 'LIST',
+        'MULTIPLE' => 'Y',
+        'VALUES' => $groups,
         'PARENT' => 'BASE',
-        'DEFAULT' => 'N'
+        'DEFAULT' => '5'
     )
     ),
 );
