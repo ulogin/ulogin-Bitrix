@@ -29,6 +29,7 @@ if (!empty($_POST['token']) && $USER->isAuthorized()) {
         $arResult['USER']['PHOTO'] = $profile['photo'];
         $arResult['USER']['PHOTO_BIG'] = $profile['photo_big'];
         $arResult['USER']['NETWORK'] = $profile['network'];
+
         // проверяем есть ли пользователь в БД.	Если есть - то авторизуем, нет  - регистрируем и авторизуем
         $rsUsers = CUser::GetList(
             ($by = "email"),
@@ -82,7 +83,7 @@ if (!empty($_POST['token']) && $USER->isAuthorized()) {
         }
     }else{
         if (isset($profile['error']))
-            ShowMessage($profile['error']);
+            ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => $profile['error']));
     }
 
 }
@@ -96,7 +97,7 @@ else
     $GLOBALS['ULOGIN_OK']++;
 }
 
-$code = '<div id="uLogin' . $GLOBALS['ULOGIN_OK'] . '" x-ulogin-params="display=' . $arParams['TYPE'] . '&fields=first_name,last_name,nickname,city,photo,photo_big,bdate,sex,email,network' .
+$code = '<div id="uLogin' . $GLOBALS['ULOGIN_OK'] . '" x-ulogin-params="display=' . $arParams['TYPE'] . '&fields=email' .
     '&providers=' . $arParams['PROVIDERS'] . '&hidden=' . $arParams['HIDDEN'] . '&redirect_uri=' . urlencode('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']) . '"></div>';
 $code = '<script src="http://ulogin.ru/js/ulogin.js"></script>' . $code;
 

@@ -1,7 +1,7 @@
 <?
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 
-require_once 'include/Ulogun.class.php';
+require_once 'include/Ulogin.class.php';
 
 $arResult = $arParams;
 
@@ -16,9 +16,11 @@ if (!empty($_POST['token']) && !$USER->isAuthorized()) {
 
         list($d, $m, $y) = explode('.', $profile['bdate']);
 
+
+
         $arResult['USER']['LOGIN'] = Ulogin::genNickname($profile);
-        $arResult['USER']['NAME'] = $profile['first_name'];
-        $arResult['USER']['LAST_NAME'] = $profile['last_name'];
+        $arResult['USER']['NAME'] = $APPLICATION->ConvertCharset($profile['first_name'], "UTF-8", SITE_CHARSET);
+        $arResult['USER']['LAST_NAME'] = $APPLICATION->ConvertCharset($profile['last_name'], "UTF-8", SITE_CHARSET);
         $arResult['USER']['EMAIL'] = $profile['email'];
         $arResult['USER']['PERSONAL_GENDER'] = ($profile['sex'] == 2 ? 'M' : 'F');
         $arResult['USER']['PERSONAL_CITY'] = $profile['city'];
@@ -27,6 +29,8 @@ if (!empty($_POST['token']) && !$USER->isAuthorized()) {
         $arResult['USER']['PHOTO'] = $profile['photo'];
         $arResult['USER']['PHOTO_BIG'] = $profile['photo_big'];
         $arResult['USER']['NETWORK'] = $profile['network'];
+
+
         // проверяем есть ли пользователь в БД.	Если есть - то авторизуем, нет  - регистрируем и авторизуем
         $rsUsers = CUser::GetList(
             ($by = "email"),
@@ -64,6 +68,38 @@ if (!empty($_POST['token']) && !$USER->isAuthorized()) {
                 $USER->Update($arUser['ID'], array('EXTERNAL_AUTH_ID'=>''));
                 Ulogin::createUloginAccount($arResult['USER'], $arUser['ID']);
                 $ID_INFO[1] = $arUser['ID'];
+            }
+
+            //Если имя и фамилия изменились, то обновляем
+
+            $rsUsers = CUser::GetList(
+                ($by = "email"),
+                ($order = "desc"),
+                array(
+                    "ID" => $ID_INFO[1]
+                )
+            );
+
+            $arUser = $rsUsers->GetNext();
+
+            $toUpdate = array();
+
+            if ($arUser["NAME"] != $arResult["USER"]["NAME"]) {
+
+                $toUpdate["NAME"] = $arResult["USER"]["NAME"];
+
+            }
+
+            if ($arUser["LAST_NAME"] != $arResult['USER']["LAST_NAME"]) {
+
+                $toUpdate["LAST_NAME"] = $arResult["USER"]["LAST_NAME"];
+
+            }
+
+            if (count($toUpdate) > 0){
+
+                $USER->Update($arUser['ID'], $toUpdate);
+
             }
 
             $USER->Authorize($ID_INFO[1]);
@@ -164,7 +200,7 @@ if (!empty($_POST['token']) && !$USER->isAuthorized()) {
         }
     }else{
         if (isset($profile['error']))
-            ShowMessage($profile['error']);
+            ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => $profile['error']));
     }
 }
 
