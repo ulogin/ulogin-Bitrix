@@ -146,12 +146,14 @@ if (!empty($_POST['token']) && !$USER->isAuthorized()) {
                 $tmpName = $tmpName = rand(100000,10000000).'.'.$ext;
                 $tmpName = $_SERVER["DOCUMENT_ROOT"]."/images/".$tmpName;
 
-            file_put_contents($tmpName,$imageContent);
-
-            $arIMAGE = CFile::MakeFileArray($tmpName);
-            $arIMAGE["MODULE_ID"] = "main";
-
-
+			if (file_put_contents($tmpName,$imageContent)){
+				$arIMAGE = CFile::MakeFileArray($tmpName);
+				$arIMAGE["MODULE_ID"] = "main";
+			}
+			else 
+				$arIMAGE = '';
+			
+			
             $arFields = Array(
                 "NAME" => $arResult['USER']['NAME'],
                 "LAST_NAME" => $arResult['USER']['LAST_NAME'],

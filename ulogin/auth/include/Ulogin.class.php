@@ -7,10 +7,13 @@ class Ulogin
     public static function genNickname($profile)
     {
         if (isset($profile['nickname'])) {
-            return $profile['nickname'];
-        } elseif (isset($profile['email']) && preg_match('/^(.+)\@/i', $profile['email'], $nickname)) {
+			if (strlen($profile['nickname']) > 2)
+				return $profile['nickname'];
+        } 
+		if (isset($profile['email']) && preg_match('/^(.+)\@/i', $profile['email'], $nickname)) {
             return $nickname[1];
-        } elseif (isset($profile['first_name']) && isset($profile['last_name'])) {
+        } 
+		if (isset($profile['first_name']) && isset($profile['last_name'])) {
             return self::normalize(iconv('utf-8', 'windows-1251', $profile['first_name'] . ' ' . $profile['last_name']), '_');
         }
 
