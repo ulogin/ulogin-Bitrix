@@ -1,6 +1,6 @@
 <?
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
-require_once "include/UloginSync.class.php";
+require_once 'include/UloginSync.class.php';
 $arResult = $arParams;
 global $DB;
 global $USER;
