@@ -1,5 +1,4 @@
 <?
-$MESS["TALKHARD_ULOGIN_PROVAYDERY"] = "Ïðîâàéäåðû";
-$MESS["TALKHARD_ULOGIN_SKRYTYE_PROVAYDERY"] = "Ñêðûòûå ïðîâàéäåðû";
-$MESS["TALKHARD_ULOGIN_TIP"] = "Òèï";
+$MESS["TALKHARD_ULOGIN_SYNC_PANEL_ID1"] = "ulogin ID Ð´Ð»Ñ Ð¿Ð°Ð½ÐµÐ»Ð¸ ÑÐ¸Ð½Ñ…Ñ€Ð¾Ð½Ð¸Ð·Ð°Ñ†Ð¸Ð¸ â„–1";
+$MESS["TALKHARD_ULOGIN_SYNC_PANEL_ID2"] = "ulogin ID Ð´Ð»Ñ Ð¿Ð°Ð½ÐµÐ»Ð¸ ÑÐ¸Ð½Ñ…Ñ€Ð¾Ð½Ð¸Ð·Ð°Ñ†Ð¸Ð¸ â„–2";
 ?>

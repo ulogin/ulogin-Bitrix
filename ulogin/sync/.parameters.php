@@ -2,28 +2,19 @@
 
 $arComponentParameters = array(
     'PARAMETERS' => array(
-        'PROVIDERS' => array(
-            'NAME' => GetMessage("TALKHARD_ULOGIN_PROVAYDERY"),
+        'ULOGINID1' => array(
+            'NAME' => GetMessage("TALKHARD_ULOGIN_SYNC_PANEL_ID1"),
             'TYPE' => 'STRING',
             'MULTIPLE' => 'N',
-            'DEFAULT' => 'vkontakte,odnoklassniki,mailru,facebook',
+            'DEFAULT' => '',
             'PARENT' => 'BASE',
         ),
-        'HIDDEN' => array(
-            'NAME' => GetMessage("TALKHARD_ULOGIN_SKRYTYE_PROVAYDERY"),
+        'ULOGINID2' => array(
+            'NAME' => GetMessage("TALKHARD_ULOGIN_SYNC_PANEL_ID2"),
             'TYPE' => 'STRING',
             'MULTIPLE' => 'N',
-            'DEFAULT' => 'other',
+            'DEFAULT' => '',
             'PARENT' => 'BASE',
-        ),
-        "TYPE" => Array(
-            "PARENT" => "BASE",
-            "NAME" => GetMessage("TALKHARD_ULOGIN_TIP"),
-            "TYPE" => "LIST",
-            "VALUES" => array('small' => 'small', 'panel' => 'panel'),
-            "DEFAULT" => 'panel',
-            "ADDITIONAL_VALUES" => "N",
-            "REFRESH" => "Y",
         ),
     ),
 );

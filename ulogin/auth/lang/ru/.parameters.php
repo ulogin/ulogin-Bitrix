@@ -1,12 +1,9 @@
 <?
-$MESS["TALKHARD_ULOGIN_PROVAYDERY"] = "Провайдеры";
-$MESS["TALKHARD_ULOGIN_SKRYTYE_PROVAYDERY"] = "Скрытые провайдеры";
-$MESS["TALKHARD_ULOGIN_TIP"] = "Тип";
-$MESS["TALKHARD_ULOGIN_STRANICA_REDIREKTA_P"] = "Страница редиректа после логина";
-$MESS["TALKHARD_ULOGIN_GRUPPA_POLQZOVATELA"] = "Группа пользователя по умолчанию";
-$MESS["TALKHARD_ULOGIN_REGISTRIROVATQ_POLQZ"] = "Регистрировать пользователей с уникальными";
-$MESS["TALKHARD_ULOGIN_OTPRAVLATQ"] = "Отправлять";
-$MESS["TALKHARD_ULOGIN_ADMINISTRATORU_PRI_R"] = "администратору при регистрации пользователя";
-$MESS["TALKHARD_ULOGIN_SYNC"] = "Панель для привязки аккаунтов";
-$MESS["TALKHARD_ULOGIN_GROUPS_MESSAGE"] = "При регистрации добавлять пользователя в группу";
+$MESS["TALKHARD_ULOGIN_PANEL_ID1"] = "uLogin ID РѕР±С‰Р°СЏ С„РѕСЂРјР° в„–1";
+$MESS["TALKHARD_ULOGIN_PANEL_ID2"] = "uLogin ID РѕР±С‰Р°СЏ С„РѕСЂРјР° в„–2";
+$MESS["TALKHARD_ULOGIN_GRUPPA_POLQZOVATELA"] = "Р“СЂСѓРїРїР° РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ";
+$MESS["TALKHARD_ULOGIN_OTPRAVLATQ"] = "РћС‚РїСЂР°РІР»СЏС‚СЊ";
+$MESS["TALKHARD_ULOGIN_ADMINISTRATORU_PRI_R"] = "Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂСѓ РїСЂРё СЂРµРіРёСЃС‚СЂР°С†РёРё РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ";
+$MESS["TALKHARD_ULOGIN_SYNC"] = "РџР°РЅРµР»СЊ РґР»СЏ РїСЂРёРІСЏР·РєРё Р°РєРєР°СѓРЅС‚РѕРІ";
+$MESS["TALKHARD_ULOGIN_GROUPS_MESSAGE"] = "Р“СЂСѓРїРїР° РєР»РёРµРЅС‚РѕРІ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ:";
 ?>

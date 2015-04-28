@@ -1,109 +1,99 @@
 <?
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
-
+require_once 'include/uLogin_sync.class.php';
 $arResult = $arParams;
-
+global $DB;
 global $USER;
 global $APPLICATION;
-
-if (!empty($_POST['token']) && $USER->isAuthorized()) {
-    $UserID = $USER->GetID();
-    $current_user = $USER->GetByID($UserID)->GetNext();
-    $networks = explode(',', $current_user['ADMIN_NOTES']);
-
-    $s = file_get_contents('http://ulogin.ru/token.php?token=' . $_POST['token'] . '&host=' . $_SERVER['HTTP_HOST']);
-    $profile = json_decode($s, true);
-
-    if (count($profile) && !isset($profile['error'])){
-
-        list($d, $m, $y) = explode('.', $profile['bdate']);
-
-        $arResult['USER']['LOGIN'] = Ulogin::genNickname($profile);
-        $arResult['USER']['NAME'] = $profile['first_name'];
-        $arResult['USER']['LAST_NAME'] = $profile['last_name'];
-        $arResult['USER']['EMAIL'] = $profile['email'];
-        $arResult['USER']['PERSONAL_GENDER'] = ($profile['sex'] == 2 ? 'M' : 'F');
-        $arResult['USER']['PERSONAL_CITY'] = $profile['city'];
-        $arResult['USER']['PERSONAL_BIRTHDAY'] = $d . '.' . $m . '.' . $y;
-        $arResult['USER']['EXTERNAL_AUTH_ID'] = $profile['identity'];
-        $arResult['USER']['PHOTO'] = $profile['photo'];
-        $arResult['USER']['PHOTO_BIG'] = $profile['photo_big'];
-        $arResult['USER']['NETWORK'] = $profile['network'];
-
-        // проверяем есть ли пользователь в БД.	Если есть - то авторизуем, нет  - регистрируем и авторизуем
-        $rsUsers = CUser::GetList(
-            ($by = "email"),
-            ($order = "desc"),
-            array(
-                "EXTERNAL_AUTH_ID" => $arResult['USER']["EXTERNAL_AUTH_ID"],
-            )
-        );
-        $arUser = $rsUsers->GetNext();
-
-
-        if ($arUser["EXTERNAL_AUTH_ID"] == $arResult['USER']["EXTERNAL_AUTH_ID"]) {
-
-            // такой пользователь есть
-
-            $ID_INFO   = explode('=',$arUser['ADMIN_NOTES']);
-            $UloginID = $arUser['ID'];
-
-            if ($arResult['USER']['NETWORK'] == $ID_INFO[0] && $arUser['ACTIVE'] == 'Y'){//старый формат хранения аккаунтов, конвертируем
-                $USER->Update($arUser['ID'], array('EXTERNAL_AUTH_ID'=>''));
-                $ID_INFO[1] = $arUser['ID'];
-                $UloginID = Ulogin::createUloginAccount($arResult['USER'], $arUser['ID']);
-            }
-
-            if ($UserID != $ID_INFO[1] && !in_array($ID_INFO[0], $networks)) { //не текущий аккаунт
-
-                $networks = implode(',',$networks).','.$ID_INFO[0];
-                $second_user = CUser::GetByID($ID_INFO[1])->GetNext();
-                $second_networks = explode(',',$second_user['ADMIN_NOTES']);
-                unset($second_networks[array_search($ID_INFO[0],$second_networks)]);
-
-                if (!count($second_networks)){
-                    $USER->Delete($ID_INFO[1]);
-                }else{
-                    $USER->Update($ID_INFO[1],array('ADMIN_NOTES' => implode(',',$second_networks)));
-                }
-
-                Ulogin::updateUloginAccount($UloginID, $UserID, $arResult['USER']['NETWORK']);
-                $USER->Update($UserID, array('ADMIN_NOTES'=>$networks));
-
-            }
-
-        }else{
-
-            if (!in_array($arResult['USER']['NETWORK'], $networks)){ //добавляем, если такого сервиса нет
-                Ulogin::createUloginAccount($arResult['USER'], $UserID);
-                $networks = implode(',', $networks). ','.$arResult['USER']['NETWORK'];
-                $USER->Update($UserID, array('ADMIN_NOTES' => $networks));
-            }
-
-        }
-    }else{
-        if (isset($profile['error']))
-            ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => $profile['error']));
-    }
-
+if (!empty($_POST['token']) && $USER->isAuthorized())
+{
+	$s = uLoginSync::uloginGetUserFromToken($_POST['token']);
+	if (!$s)
+	{
+		ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => 'РћС€РёР±РєР° СЂР°Р±РѕС‚С‹ uLogin:РќРµ СѓРґР°Р»РѕСЃСЊ РїРѕР»СѓС‡РёС‚СЊ РґР°РЅРЅС‹Рµ Рѕ РїРѕР»СЊР·РѕРІР°С‚РµР»Рµ СЃ РїРѕРјРѕС‰СЊСЋ С‚РѕРєРµРЅР°.'));
+		return;
+	}
+	$profile = json_decode($s, true);
+	$check = uLoginSync::CheckTokenError($profile);
+	if (!$check)
+	{
+		return false;
+	}
+//РїСЂРѕРІРµСЂСЏРµРј РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ РІ С‚Р°Р±Р»РёС†Рµ uLogin`Р°
+	$user_id = $DB->Query('SELECT * FROM uLogin_users WHERE identity = "'.urlencode($profile['identity']).'"');
+	$user_id = $user_id->GetNext();
+	$user_id = $user_id['userid'];
+	if ($user_id)
+	{
+		$loginUsers = CUser::GetList(($by = "id"), ($order = "desc"), array("ID" => $user_id, "ACTIVE" => "Y"));
+		if ($user_id > 0 && $loginUsers->SelectedRowsCount() > 0) uLoginSync::uloginCheckUserId($user_id);
+		else $user_id = uLoginSync::RegistrationUser($profile, 1, $arParams);
+	}
+	else
+		$user_id = uLoginSync::RegistrationUser($profile, 0, $arParams);
+	if ($user_id > 0) uLoginSync::loginUser($profile, $user_id);
+	if ($arParams["REDIRECT_PAGE"] != "") LocalRedirect($arParams["REDIRECT_PAGE"]);
+	else
+		LocalRedirect($APPLICATION->GetCurPageParam("", array("logout")));
 }
-
-
-if (!isset($GLOBALS['ULOGIN_OK'])) {
-    $GLOBALS['ULOGIN_OK'] = 1;
+if (!isset($GLOBALS['ULOGIN_OK']))
+{
+	$GLOBALS['ULOGIN_OK'] = 1;
 }
 else
 {
-    $GLOBALS['ULOGIN_OK']++;
+	$GLOBALS['ULOGIN_OK']++;
+}
+$code = getPanelCode(0, $arParams);
+/*
+ * РџРѕР»СѓС‡Р°РµС‚ div РїР°РЅРµР»СЊ
+ */
+function getPanelCode($place = 0, $arResult)
+{
+	$default_panel = false;
+	switch ($place)
+	{
+		case 0:
+			$uloginID = $arResult['ULOGINID1'];
+			break;
+		case 1:
+			$uloginID = $arResult['ULOGINID2'];
+			break;
+		default:
+			$uloginID = $arResult['ULOGINID1'];
+	}
+	if (empty($uloginID))
+	{
+		$default_panel = true;
+	}
+	$panel = '';
+	$redirect_uri = urlencode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+	$panel .= '<div id=ulogin'.$GLOBALS['ULOGIN_OK'].' class="ulogin_panel"';
+	if ($default_panel)
+	{
+		$_uLoginDefaultOptions = array('display' => 'small', 'providers' => 'vkontakte,odnoklassniki,mailru,facebook', 'hidden' => 'other', 'fields' => 'first_name,last_name,email,photo,photo_big', 'optional' => 'phone', 'redirect_uri' => $redirect_uri,);
+		$arResult['REDIRECT_PAGE'] = $redirect_uri;
+		$x_ulogin_params = '';
+		foreach ($_uLoginDefaultOptions as $key => $value)
+		{
+			$x_ulogin_params .= $key.'='.$value.';';
+		}
+		$panel .= ' data-ulogin="'.$x_ulogin_params.'"></div>';
+	}
+	else
+	{
+		$panel .= ' data-uloginid="'.$uloginID.'" data-ulogin="redirect_uri='.$redirect_uri.'"></div>';
+	}
+	return $panel;
 }
 
-$code = '<div id="uLogin' . $GLOBALS['ULOGIN_OK'] . '" x-ulogin-params="display=' . $arParams['TYPE'] . '&fields=email' .
-    '&providers=' . $arParams['PROVIDERS'] . '&hidden=' . $arParams['HIDDEN'] . '&redirect_uri=' . urlencode('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']) . '"></div>';
-$code = '<script src="http://ulogin.ru/js/ulogin.js"></script>' . $code;
-
-
+if ($GLOBALS['ULOGIN_OK'] == 1)
+{
+	$code = '<link type="text/css" rel="stylesheet" href="https://ulogin.ru/css/providers.css">
+<script src="//ulogin.ru/js/ulogin.js"></script>'.$code;
+}
 $arResult['ULOGIN_CODE'] = $code;
-
-
+$syncpanel = uLoginSync::getuLoginUserAccountsPanel();
+$arResult['ULOGIN_SYNC'] = $syncpanel;
 $this->IncludeComponentTemplate();
 ?>
