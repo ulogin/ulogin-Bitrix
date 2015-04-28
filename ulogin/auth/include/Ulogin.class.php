@@ -195,6 +195,8 @@ class Ulogin {
 	 */
 	public static function RegistrationUser($u_user, $in_db = 0, $arParams)
 	{
+		global $APPLICATION;
+
 		if (!isset($u_user['email']))
 		{
 			ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => 'Через данную форму выполнить регистрацию невозможно. Сообщите администратору сайта о следующей ошибке:
@@ -214,9 +216,9 @@ class Ulogin {
 		$current_user = $USER->GetID();
 		if ($check_m_user == false)
 		{
-			$u_user['first_name'] = isset($u_user['first_name']) ? $u_user['first_name'] : "";
-			$u_user['last_name'] = isset($u_user['last_name']) ? $u_user['last_name'] : "";
-			$u_user['nickname'] = isset($u_user['nickname']) ? $u_user['nickname'] : "";
+			$u_user['first_name'] = isset($u_user['first_name']) ? $APPLICATION->ConvertCharset($u_user['first_name'], "UTF-8", SITE_CHARSET) : "";
+			$u_user['last_name'] = isset($u_user['last_name']) ? $APPLICATION->ConvertCharset($u_user['last_name'], "UTF-8", SITE_CHARSET) : "";
+			$u_user['nickname'] = isset($u_user['nickname']) ? $APPLICATION->ConvertCharset($u_user['nickname'], "UTF-8", SITE_CHARSET) : "";
 			$u_user['b_date'] = isset($u_user['b_date']) ? $u_user['b_date'] : "";
 			// регистрируем пользователя
 			list($d, $m, $y) = explode('.', $u_user['bdate']);//можно просто представить в другом формате стандартной функцией php
