@@ -27,7 +27,7 @@ if (!empty($_POST['token']) && $USER->isAuthorized())
 	{
 		$loginUsers = CUser::GetList(($by = "id"), ($order = "desc"), array("ID" => $user_id, "ACTIVE" => "Y"));
 		if ($user_id > 0 && $loginUsers->SelectedRowsCount() > 0) uLoginSync::uloginCheckUserId($user_id);
-		else $user_id = uLoginSync::RegistrationUser($profile, 1, $arParams);
+		else $user_id = uloginSync::RegistrationUser($profile, 1, $arParams);
 	}
 	else
 		$user_id = uLoginSync::RegistrationUser($profile, 0, $arParams);
