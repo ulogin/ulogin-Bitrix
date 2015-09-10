@@ -1,11 +1,11 @@
 # uLogin
 
-Donate link: http://ulogin.ru
-Tags: ulogin, login, social, authorization
-Requires at least: 11.0.0
-Tested up to: 15.0.6
-Stable tag: 2.0.1
-License: GNU General Public License, version 2
+Donate link: http://ulogin.ru  
+Tags: ulogin, login, social, authorization  
+Requires at least: 11.0.0  
+Tested up to: 15.0.6  
+Stable tag: 2.0.1  
+License: GNU General Public License, version 2  
 
 **uLogin** — это инструмент, который позволяет пользователям получить единый доступ к различным Интернет-сервисам без необходимости повторной регистрации,
 а владельцам сайтов — получить дополнительный приток пользователей из социальных сетей и популярных порталов (Google, Яндекс, Mail.ru, ВКонтакте, Facebook и др.)
