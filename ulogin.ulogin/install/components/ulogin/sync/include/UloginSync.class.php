@@ -232,6 +232,7 @@ class ULoginSync {
 			{
 				$c = curl_init($request);
 				curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
+				curl_setopt($request, CURLOPT_FOLLOWLOCATION, 1);
 				$response = curl_exec($c);
 				curl_close($c);
 			}

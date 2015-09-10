@@ -161,6 +161,7 @@ class Ulogin {
 			if(in_array('curl', get_loaded_extensions())) {
 				$c = curl_init($request);
 				curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
+				curl_setopt($request, CURLOPT_FOLLOWLOCATION, 1);
 				$response = curl_exec($c);
 				curl_close($c);
 			} elseif(function_exists('file_get_contents') && ini_get('allow_url_fopen'))
