@@ -79,22 +79,22 @@ License: GNU General Public License, version 2
 
 Для использования панели авторизации в редакторе php-кода 1C Bitrix используйте код:
 
-  `<?php
-   $APPLICATION->IncludeComponent(
-  	"ulogin:auth",
-	"",
-  	Array(
-		"PROVIDERS" => "vkontakte,odnoklassniki,mailru,facebook",
-		"HIDDEN" => "other",
-		"TYPE" => "small",
-		"SEND_MAIL" => "N",
-		"SOCIAL_LINK" => "Y"
-		"GROUP_ID" => array("5"),
-		"ULOGINID1" => "",
-		"ULOGINID2" => ""
-	)
-  );
-  ?>`
+  <?php  
+   $APPLICATION->IncludeComponent(  
+  	"ulogin:auth",  
+	"",  
+  	Array(  
+		"PROVIDERS" => "vkontakte,odnoklassniki,mailru,facebook",  
+		"HIDDEN" => "other",  
+		"TYPE" => "small",  
+		"SEND_MAIL" => "N",  
+		"SOCIAL_LINK" => "Y",  
+		"GROUP_ID" => array("5"),  
+		"ULOGINID1" => "",  
+		"ULOGINID2" => ""  
+	)  
+  );  
+  ?>  
 
 
 ## Изменения
