@@ -1,10 +1,10 @@
 <?
-$MESS["ULOGIN_PANEL_ID1"] = "uLogin ID Ð¾Ð±Ñ‰Ð°Ñ Ñ„Ð¾Ñ€Ð¼Ð° â„–1";
-$MESS["ULOGIN_PANEL_ID2"] = "uLogin ID Ð¾Ð±Ñ‰Ð°Ñ Ñ„Ð¾Ñ€Ð¼Ð° â„–2";
-$MESS["ULOGIN_GRUPPA_POLQZOVATELA"] = "Ð“Ñ€ÑƒÐ¿Ð¿Ð° Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»Ñ Ð¿Ð¾ ÑƒÐ¼Ð¾Ð»Ñ‡Ð°Ð½Ð¸ÑŽ";
-$MESS["ULOGIN_OTPRAVLATQ"] = "ÐžÑ‚Ð¿Ñ€Ð°Ð²Ð»ÑÑ‚ÑŒ";
-$MESS["ULOGIN_ADMINISTRATORU_PRI_R"] = "Ð°Ð´Ð¼Ð¸Ð½Ð¸ÑÑ‚Ñ€Ð°Ñ‚Ð¾Ñ€Ñƒ Ð¿Ñ€Ð¸ Ñ€ÐµÐ³Ð¸ÑÑ‚Ñ€Ð°Ñ†Ð¸Ð¸ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»Ñ";
-$MESS["ULOGIN_SYNC"] = "ÐŸÐ°Ð½ÐµÐ»ÑŒ Ð´Ð»Ñ Ð¿Ñ€Ð¸Ð²ÑÐ·ÐºÐ¸ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð¾Ð²";
-$MESS["ULOGIN_GROUPS_MESSAGE"] = "Ð“Ñ€ÑƒÐ¿Ð¿Ð° ÐºÐ»Ð¸ÐµÐ½Ñ‚Ð¾Ð² Ð¿Ð¾ ÑƒÐ¼Ð¾Ð»Ñ‡Ð°Ð½Ð¸ÑŽ:";
-$MESS["ULOGIN_SOCIAL"] = "Ð¡Ð¾Ñ…Ñ€Ð°Ð½ÑÑ‚ÑŒ ÑÑÑ‹Ð»ÐºÑƒ Ð½Ð° ÑÑ‚Ñ€Ð°Ð½Ð¸Ñ†Ñƒ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»Ñ Ð² ÑÐ¾Ñ†ÑÐµÑ‚Ð¸";
+$MESS["ULOGIN_PANEL_ID1"] = "uLogin ID îáùàÿ ôîðìà ¹1";
+$MESS["ULOGIN_PANEL_ID2"] = "uLogin ID îáùàÿ ôîðìà ¹2";
+$MESS["ULOGIN_GRUPPA_POLQZOVATELA"] = "Ãðóïïà ïîëüçîâàòåëÿ ïî óìîë÷àíèþ";
+$MESS["ULOGIN_OTPRAVLATQ"] = "Îòïðàâëÿòü";
+$MESS["ULOGIN_ADMINISTRATORU_PRI_R"] = "àäìèíèñòðàòîðó ïðè ðåãèñòðàöèè ïîëüçîâàòåëÿ";
+$MESS["ULOGIN_SYNC"] = "Ïàíåëü äëÿ ïðèâÿçêè àêêàóíòîâ";
+$MESS["ULOGIN_GROUPS_MESSAGE"] = "Ãðóïïà êëèåíòîâ ïî óìîë÷àíèþ:";
+$MESS["ULOGIN_SOCIAL"] = "Ñîõðàíÿòü ññûëêó íà ñòðàíèöó ïîëüçîâàòåëÿ â ñîöñåòè";
 ?>

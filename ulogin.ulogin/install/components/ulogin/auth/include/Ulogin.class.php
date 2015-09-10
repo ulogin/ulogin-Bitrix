@@ -3,42 +3,42 @@
 class Ulogin {
 
 	/**
-	 * Проверка пользовательских данных, полученных по токену
-	 * @param $u_user - пользовательские данные
+	 * РџСЂРѕРІРµСЂРєР° РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёС… РґР°РЅРЅС‹С…, РїРѕР»СѓС‡РµРЅРЅС‹С… РїРѕ С‚РѕРєРµРЅСѓ
+	 * @param $u_user - РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёРµ РґР°РЅРЅС‹Рµ
 	 * @return bool
 	 */
 	public static function CheckTokenError($u_user) {
 		if(!is_array($u_user)) {
-			ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => 'Ошибка работы uLogin: Данные о пользователе содержат неверный формат.'));
+			ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => 'РћС€РёР±РєР° СЂР°Р±РѕС‚С‹ uLogin: Р”Р°РЅРЅС‹Рµ Рѕ РїРѕР»СЊР·РѕРІР°С‚РµР»Рµ СЃРѕРґРµСЂР¶Р°С‚ РЅРµРІРµСЂРЅС‹Р№ С„РѕСЂРјР°С‚.'));
 
 			return false;
 		}
 		if(isset($u_user['error'])) {
 			$strpos = strpos($u_user['error'], 'host is not');
 			if($strpos) {
-				ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => 'Ошибка работы uLogin: адрес хоста не совпадает с оригиналом'));
+				ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => 'РћС€РёР±РєР° СЂР°Р±РѕС‚С‹ uLogin: Р°РґСЂРµСЃ С…РѕСЃС‚Р° РЅРµ СЃРѕРІРїР°РґР°РµС‚ СЃ РѕСЂРёРіРёРЅР°Р»РѕРј'));
 
 				return false;
 			}
 			switch($u_user['error']) {
 				case 'token expired':
-					ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => 'Ошибка работы uLogin: время жизни токена истекло'));
+					ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => 'РћС€РёР±РєР° СЂР°Р±РѕС‚С‹ uLogin: РІСЂРµРјСЏ Р¶РёР·РЅРё С‚РѕРєРµРЅР° РёСЃС‚РµРєР»Рѕ'));
 
 					return false;
 					break;
 				case 'invalid token':
-					ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => 'Ошибка работы uLogin: неверный токен'));
+					ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => 'РћС€РёР±РєР° СЂР°Р±РѕС‚С‹ uLogin: РЅРµРІРµСЂРЅС‹Р№ С‚РѕРєРµРЅ'));
 
 					return false;
 					break;
 				default:
-					ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => 'Ошибка работы uLogin:'));
+					ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => 'РћС€РёР±РєР° СЂР°Р±РѕС‚С‹ uLogin:'));
 
 					return false;
 			}
 		}
 		if(!isset($u_user['identity'])) {
-			ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => 'Ошибка работы uLogin: В возвращаемых данных отсутствует переменная "identity"'));
+			ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => 'РћС€РёР±РєР° СЂР°Р±РѕС‚С‹ uLogin: Р’ РІРѕР·РІСЂР°С‰Р°РµРјС‹С… РґР°РЅРЅС‹С… РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚ РїРµСЂРµРјРµРЅРЅР°СЏ "identity"'));
 
 			return false;
 		}
@@ -47,8 +47,8 @@ class Ulogin {
 	}
 
 	/**
-	 * Гнерация логина пользователя
-	 * в случае успешного выполнения возвращает уникальный логин пользователя
+	 * Р“РЅРµСЂР°С†РёСЏ Р»РѕРіРёРЅР° РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
+	 * РІ СЃР»СѓС‡Р°Рµ СѓСЃРїРµС€РЅРѕРіРѕ РІС‹РїРѕР»РЅРµРЅРёСЏ РІРѕР·РІСЂР°С‰Р°РµС‚ СѓРЅРёРєР°Р»СЊРЅС‹Р№ Р»РѕРіРёРЅ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
 	 * @param $first_name
 	 * @param string $last_name
 	 * @param string $nickname
@@ -95,10 +95,10 @@ class Ulogin {
 	}
 
 	/**
-	 * Транслит
+	 * РўСЂР°РЅСЃР»РёС‚
 	 */
 	public static function uLoginTranslitIt($str) {
-		$tr = array("А" => "a", "Б" => "b", "В" => "v", "Г" => "g", "Д" => "d", "Е" => "e", "Ж" => "j", "З" => "z", "И" => "i", "Й" => "y", "К" => "k", "Л" => "l", "М" => "m", "Н" => "n", "О" => "o", "П" => "p", "Р" => "r", "С" => "s", "Т" => "t", "У" => "u", "Ф" => "f", "Х" => "h", "Ц" => "ts", "Ч" => "ch", "Ш" => "sh", "Щ" => "sch", "Ъ" => "", "Ы" => "yi", "Ь" => "", "Э" => "e", "Ю" => "yu", "Я" => "ya", "а" => "a", "б" => "b", "в" => "v", "г" => "g", "д" => "d", "е" => "e", "ж" => "j", "з" => "z", "и" => "i", "й" => "y", "к" => "k", "л" => "l", "м" => "m", "н" => "n", "о" => "o", "п" => "p", "р" => "r", "с" => "s", "т" => "t", "у" => "u", "ф" => "f", "х" => "h", "ц" => "ts", "ч" => "ch", "ш" => "sh", "щ" => "sch", "ъ" => "y", "ы" => "y", "ь" => "", "э" => "e", "ю" => "yu", "я" => "ya");
+		$tr = array("Рђ" => "a", "Р‘" => "b", "Р’" => "v", "Р“" => "g", "Р”" => "d", "Р•" => "e", "Р–" => "j", "Р—" => "z", "Р" => "i", "Р™" => "y", "Рљ" => "k", "Р›" => "l", "Рњ" => "m", "Рќ" => "n", "Рћ" => "o", "Рџ" => "p", "Р " => "r", "РЎ" => "s", "Рў" => "t", "РЈ" => "u", "Р¤" => "f", "РҐ" => "h", "Р¦" => "ts", "Р§" => "ch", "РЁ" => "sh", "Р©" => "sch", "РЄ" => "", "Р«" => "yi", "Р¬" => "", "Р­" => "e", "Р®" => "yu", "РЇ" => "ya", "Р°" => "a", "Р±" => "b", "РІ" => "v", "Рі" => "g", "Рґ" => "d", "Рµ" => "e", "Р¶" => "j", "Р·" => "z", "Рё" => "i", "Р№" => "y", "Рє" => "k", "Р»" => "l", "Рј" => "m", "РЅ" => "n", "Рѕ" => "o", "Рї" => "p", "СЂ" => "r", "СЃ" => "s", "С‚" => "t", "Сѓ" => "u", "С„" => "f", "С…" => "h", "С†" => "ts", "С‡" => "ch", "С€" => "sh", "С‰" => "sch", "СЉ" => "y", "С‹" => "y", "СЊ" => "", "СЌ" => "e", "СЋ" => "yu", "СЏ" => "ya");
 		if(preg_match('/[^A-Za-z0-9\_\-]/', $str)) {
 			$str = strtr($str, $tr);
 			$str = preg_replace('/[^A-Za-z0-9\_\-\.]/', '', $str);
@@ -108,7 +108,7 @@ class Ulogin {
 	}
 
 	/**
-	 * Проверка существует ли пользователь с заданным логином
+	 * РџСЂРѕРІРµСЂРєР° СЃСѓС‰РµСЃС‚РІСѓРµС‚ Р»Рё РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ СЃ Р·Р°РґР°РЅРЅС‹Рј Р»РѕРіРёРЅРѕРј
 	 */
 	public function ulogin_userExist($login) {
 		$loginUsers = CUser::GetList(($by = "id"), ($order = "desc"), array("LOGIN" => $login, "ACTIVE" => "Y"));
@@ -127,15 +127,15 @@ class Ulogin {
 		global $USER;
 		$current_user = $USER->GetID();
 		if(($current_user > 0) && ($user_id > 0) && ($current_user != $user_id)) {
-			ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => 'Данный аккаунт привязан к другому пользователю. Вы не можете использовать этот аккаунт'));
-			die('<br/><a href="' . $_POST['backurl'] . '">Назад</a>');
+			ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => 'Р”Р°РЅРЅС‹Р№ Р°РєРєР°СѓРЅС‚ РїСЂРёРІСЏР·Р°РЅ Рє РґСЂСѓРіРѕРјСѓ РїРѕР»СЊР·РѕРІР°С‚РµР»СЋ. Р’С‹ РЅРµ РјРѕР¶РµС‚Рµ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ СЌС‚РѕС‚ Р°РєРєР°СѓРЅС‚'));
+			die('<br/><a href="' . $_POST['backurl'] . '">РќР°Р·Р°Рґ</a>');
 		}
 
 		return true;
 	}
 
 	/**
-	 * проверка уникальности email
+	 * РїСЂРѕРІРµСЂРєР° СѓРЅРёРєР°Р»СЊРЅРѕСЃС‚Рё email
 	 */
 	public static function check($arParams) {
 		if($arParams['UNIQUE_EMAIL'] == 'Y') {
@@ -149,7 +149,7 @@ class Ulogin {
 	}
 
 	/**
-	 * Обменивает токен на пользовательские данные
+	 * РћР±РјРµРЅРёРІР°РµС‚ С‚РѕРєРµРЅ РЅР° РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёРµ РґР°РЅРЅС‹Рµ
 	 * @param bool $token
 	 * @return bool|mixed|string
 	 */
@@ -171,17 +171,17 @@ class Ulogin {
 	}
 
 	/**
-	 * Регистрация на сайте и в таблице uLogin
-	 * @param Array $u_user - данные о пользователе, полученные от uLogin
-	 * @param int $in_db - при значении 1 необходимо переписать данные в таблице uLogin
+	 * Р РµРіРёСЃС‚СЂР°С†РёСЏ РЅР° СЃР°Р№С‚Рµ Рё РІ С‚Р°Р±Р»РёС†Рµ uLogin
+	 * @param Array $u_user - РґР°РЅРЅС‹Рµ Рѕ РїРѕР»СЊР·РѕРІР°С‚РµР»Рµ, РїРѕР»СѓС‡РµРЅРЅС‹Рµ РѕС‚ uLogin
+	 * @param int $in_db - РїСЂРё Р·РЅР°С‡РµРЅРёРё 1 РЅРµРѕР±С…РѕРґРёРјРѕ РїРµСЂРµРїРёСЃР°С‚СЊ РґР°РЅРЅС‹Рµ РІ С‚Р°Р±Р»РёС†Рµ uLogin
 	 * @return bool|int|Error
 	 */
 	public static function RegistrationUser($u_user, $in_db = 0, $arParams) {
 		global $APPLICATION;
 		if(!isset($u_user['email'])) {
-			ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => 'Через данную форму выполнить регистрацию невозможно. Сообщите администратору сайта о следующей ошибке:
-            Необходимо указать "email" в возвращаемых полях uLogin'));
-			die('<br/><a href="' . $_POST['backurl'] . '">Назад</a>');
+			ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => 'Р§РµСЂРµР· РґР°РЅРЅСѓСЋ С„РѕСЂРјСѓ РІС‹РїРѕР»РЅРёС‚СЊ СЂРµРіРёСЃС‚СЂР°С†РёСЋ РЅРµРІРѕР·РјРѕР¶РЅРѕ. РЎРѕРѕР±С‰РёС‚Рµ Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂСѓ СЃР°Р№С‚Р° Рѕ СЃР»РµРґСѓСЋС‰РµР№ РѕС€РёР±РєРµ:
+            РќРµРѕР±С…РѕРґРёРјРѕ СѓРєР°Р·Р°С‚СЊ "email" РІ РІРѕР·РІСЂР°С‰Р°РµРјС‹С… РїРѕР»СЏС… uLogin'));
+			die('<br/><a href="' . $_POST['backurl'] . '">РќР°Р·Р°Рґ</a>');
 		}
 		global $USER;
 		global $DB;
@@ -190,7 +190,7 @@ class Ulogin {
 		if($in_db == 1) {
 			$result = $DB->Query('DELETE FROM ulogin_users WHERE identity = "' . urlencode($u_user['identity']) . '"');
 		}
-//		// $check_m_user == true -> есть пользователь с таким email
+//		// $check_m_user == true -> РµСЃС‚СЊ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ СЃ С‚Р°РєРёРј email
 		$check_m_user = $arUser['ID'] > 0 ? true : false;
 		$current_user = $USER->GetID();
 		if($check_m_user == false) {
@@ -199,8 +199,8 @@ class Ulogin {
 			$u_user['nickname'] = isset($u_user['nickname']) ? $APPLICATION->ConvertCharset($u_user['nickname'], "UTF-8", SITE_CHARSET) : "";
 			var_dump($u_user['bdate']);
 			$u_user['bdate'] = isset($u_user['bdate']) ? $u_user['bdate'] : "";
-			// регистрируем пользователя
-			if(!empty($u_user['bdate'])) {//можно просто представить в другом формате стандартной функцией php
+			// СЂРµРіРёСЃС‚СЂРёСЂСѓРµРј РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
+			if(!empty($u_user['bdate'])) {//РјРѕР¶РЅРѕ РїСЂРѕСЃС‚Рѕ РїСЂРµРґСЃС‚Р°РІРёС‚СЊ РІ РґСЂСѓРіРѕРј С„РѕСЂРјР°С‚Рµ СЃС‚Р°РЅРґР°СЂС‚РЅРѕР№ С„СѓРЅРєС†РёРµР№ php
 				list($d, $m, $y) = explode('.', $u_user['bdate']);
 				$m = ($m < 10) ? '0'.$m : $m;
 				$d = ($d < 10) ? '0'.$d : $d;
@@ -264,8 +264,8 @@ class Ulogin {
 			if($UserID > 0) {
 				$result = $DB->Query('INSERT INTO ulogin_users (id, userid, identity, network) VALUES (NULL,"' . $UserID . '","' . urlencode($u_user['identity']) . '","' . $u_user['network'] . '")');
 			} else {
-				ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => 'Ошибка регистрации: Не удалось зарегистрировать пользователя.'));
-				die('<br/><a href="' . $_POST['backurl'] . '">Назад</a>');
+				ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => 'РћС€РёР±РєР° СЂРµРіРёСЃС‚СЂР°С†РёРё: РќРµ СѓРґР°Р»РѕСЃСЊ Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°С‚СЊ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ.'));
+				die('<br/><a href="' . $_POST['backurl'] . '">РќР°Р·Р°Рґ</a>');
 			}
 			if($UserID && $arParams['SEND_EMAIL'] == 'Y') {
 				$arEventFields = array(
@@ -286,7 +286,7 @@ class Ulogin {
 			return $UserID;
 		} else {
 			if(!isset($u_user["verified_email"]) || intval($u_user["verified_email"]) != 1) {
-				die('<script src="//ulogin.ru/js/ulogin.js"  type="text/javascript"></script><script type="text/javascript">uLogin.mergeAccounts("' . $_POST['token'] . '")</script>' . 'Электронный адрес данного аккаунта совпадает с электронным адресом существующего пользователя. Требуется подтверждение на владение указанным email.' . '<br/><a href="' . $_POST['backurl'] . '">Назад</a>');
+				die('<script src="//ulogin.ru/js/ulogin.js"  type="text/javascript"></script><script type="text/javascript">uLogin.mergeAccounts("' . $_POST['token'] . '")</script>' . 'Р­Р»РµРєС‚СЂРѕРЅРЅС‹Р№ Р°РґСЂРµСЃ РґР°РЅРЅРѕРіРѕ Р°РєРєР°СѓРЅС‚Р° СЃРѕРІРїР°РґР°РµС‚ СЃ СЌР»РµРєС‚СЂРѕРЅРЅС‹Рј Р°РґСЂРµСЃРѕРј СЃСѓС‰РµСЃС‚РІСѓСЋС‰РµРіРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ. РўСЂРµР±СѓРµС‚СЃСЏ РїРѕРґС‚РІРµСЂР¶РґРµРЅРёРµ РЅР° РІР»Р°РґРµРЅРёРµ СѓРєР°Р·Р°РЅРЅС‹Рј email.' . '<br/><a href="' . $_POST['backurl'] . '">РќР°Р·Р°Рґ</a>');
 			}
 			if(intval($u_user["verified_email"]) == 1) {
 				$user_id = $arUser['ID'];
@@ -299,7 +299,7 @@ class Ulogin {
 				}
 				if($other) {
 					if(!isset($u_user['merge_account'])) {
-						die('<script src="//ulogin.ru/js/ulogin.js"  type="text/javascript"></script><script type="text/javascript">uLogin.mergeAccounts("' . $_POST['token'] . '","' . $other[$key] . '")</script>' . 'С данным аккаунтом уже связаны данные из другой социальной сети. Требуется привязка новой учётной записи социальной сети к этому аккаунту' . '<br/><a href="' . $_POST['backurl'] . '">Назад</a>');
+						die('<script src="//ulogin.ru/js/ulogin.js"  type="text/javascript"></script><script type="text/javascript">uLogin.mergeAccounts("' . $_POST['token'] . '","' . $other[$key] . '")</script>' . 'РЎ РґР°РЅРЅС‹Рј Р°РєРєР°СѓРЅС‚РѕРј СѓР¶Рµ СЃРІСЏР·Р°РЅС‹ РґР°РЅРЅС‹Рµ РёР· РґСЂСѓРіРѕР№ СЃРѕС†РёР°Р»СЊРЅРѕР№ СЃРµС‚Рё. РўСЂРµР±СѓРµС‚СЃСЏ РїСЂРёРІСЏР·РєР° РЅРѕРІРѕР№ СѓС‡С‘С‚РЅРѕР№ Р·Р°РїРёСЃРё СЃРѕС†РёР°Р»СЊРЅРѕР№ СЃРµС‚Рё Рє СЌС‚РѕРјСѓ Р°РєРєР°СѓРЅС‚Сѓ' . '<br/><a href="' . $_POST['backurl'] . '">РќР°Р·Р°Рґ</a>');
 					}
 				}
 			}
@@ -311,15 +311,15 @@ class Ulogin {
 	}
 
 	/**
-	 * Обновление данных о пользователе и вход
-	 * @param $u_user - данные о пользователе, полученные от uLogin
-	 * @param $id_customer - идентификатор пользователя
+	 * РћР±РЅРѕРІР»РµРЅРёРµ РґР°РЅРЅС‹С… Рѕ РїРѕР»СЊР·РѕРІР°С‚РµР»Рµ Рё РІС…РѕРґ
+	 * @param $u_user - РґР°РЅРЅС‹Рµ Рѕ РїРѕР»СЊР·РѕРІР°С‚РµР»Рµ, РїРѕР»СѓС‡РµРЅРЅС‹Рµ РѕС‚ uLogin
+	 * @param $id_customer - РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
 	 * @return string
 	 */
 	public function loginUser($u_user, $id_customer) {
 		global $USER;
-		//авторизуем пользователя
-		//дописать проверку изменения данных
+		//Р°РІС‚РѕСЂРёР·СѓРµРј РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
+		//РґРѕРїРёСЃР°С‚СЊ РїСЂРѕРІРµСЂРєСѓ РёР·РјРµРЅРµРЅРёСЏ РґР°РЅРЅС‹С…
 		$USER->Authorize($id_customer);
 	}
 }

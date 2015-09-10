@@ -1,5 +1,5 @@
 <?
-$MESS["ulogin.ulogin_MODULE_NAME"] = "ÐÐ²Ñ‚Ð¾Ñ€Ð¸Ð·Ð°Ñ†Ð¸Ñ Ñ‡ÐµÑ€ÐµÐ· uLogin";
+$MESS["ulogin.ulogin_MODULE_NAME"] = "Àâòîðèçàöèÿ ÷åðåç uLogin";
 $MESS["ulogin.ulogin_MODULE_DESC"] = "";
 $MESS["ulogin.ulogin_PARTNER_NAME"] = "uLogin Team";
 $MESS["ulogin.ulogin_PARTNER_URI"] = "https://ulogin.ru/";

@@ -1,5 +1,5 @@
 <?
-$MESS["ULOGIN_PRIVET"] = "ÐŸÑ€Ð¸Ð²ÐµÑ‚, ";
-$MESS["ULOGIN_VYYTI"] = "Ð’Ñ‹Ð¹Ñ‚Ð¸";
-$MESS["ULOGIN_SYNC_MESSAGE"] = "ÐŸÑ€Ð¸Ð²ÑÐ·ÐºÐ° Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð¾Ð² uLogin: ";
+$MESS["ULOGIN_PRIVET"] = "Ïðèâåò, ";
+$MESS["ULOGIN_VYYTI"] = "Âûéòè";
+$MESS["ULOGIN_SYNC_MESSAGE"] = "Ïðèâÿçêà àêêàóíòîâ uLogin: ";
 ?>

@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 header('Content-Type: text/html; charset=windows-1251');
 require_once($_SERVER['DOCUMENT_ROOT'].'/bitrix/modules/main/include/prolog_before.php');
 define("STOP_STATISTICS", true);
