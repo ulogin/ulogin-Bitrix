@@ -23,20 +23,26 @@ $arComponentParameters = array(
             'DEFAULT' => '',
             'PARENT' => 'BASE',
         ),
-	"SEND_MAIL" => array(
-	  'NAME' => GetMessage("TALKHARD_ULOGIN_OTPRAVLATQ").' email '.GetMessage("TALKHARD_ULOGIN_ADMINISTRATORU_PRI_R"),
-	  'TYPE' => 'CHECKBOX',
-	  'PARENT' => 'BASE',
-	  'DEFAULT' => 'N'
-	),
-    "GROUP_ID" => array(
-        'NAME' => GetMessage("TALKHARD_ULOGIN_GROUPS_MESSAGE"),
-        'TYPE' => 'LIST',
-        'MULTIPLE' => 'Y',
-        'VALUES' => $groups,
-        'PARENT' => 'BASE',
-        'DEFAULT' => '5'
-    )
+	    "SEND_MAIL" => array(
+	        'NAME' => GetMessage("TALKHARD_ULOGIN_OTPRAVLATQ").' email '.GetMessage("TALKHARD_ULOGIN_ADMINISTRATORU_PRI_R"),
+	        'TYPE' => 'CHECKBOX',
+	        'PARENT' => 'BASE',
+	        'DEFAULT' => 'N'
+	    ),
+        "SOCIAL_LINK" => array(
+	        'NAME' => GetMessage("TALKHARD_ULOGIN_SOCIAL"),
+	        'TYPE' => 'CHECKBOX',
+	        'PARENT' => 'BASE',
+	        'DEFAULT' => 'N'
+	    ),
+        "GROUP_ID" => array(
+            'NAME' => GetMessage("TALKHARD_ULOGIN_GROUPS_MESSAGE"),
+            'TYPE' => 'LIST',
+            'MULTIPLE' => 'Y',
+            'VALUES' => $groups,
+            'PARENT' => 'BASE',
+            'DEFAULT' => '5'
+        )
     ),
 );
 ?>

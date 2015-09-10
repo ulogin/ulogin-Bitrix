@@ -71,7 +71,7 @@ function getPanelCode($place = 0, $arResult)
 	$panel .= '<div class="ulogin'.$GLOBALS['ULOGIN_OK'].' ulogin_panel"';
 	if ($default_panel)
 	{
-		$_uLoginDefaultOptions = array('display' => 'small', 'providers' => 'vkontakte,odnoklassniki,mailru,facebook', 'hidden' => 'other', 'fields' => 'first_name,last_name,email,photo,photo_big', 'optional' => 'phone', 'redirect_uri' => $redirect_uri,);
+		$_uLoginDefaultOptions = array('display' => 'small', 'providers' => 'vkontakte,odnoklassniki,mailru,facebook', 'hidden' => 'other', 'fields' => 'first_name,last_name,email,photo,photo_big', 'optional' => 'sex,bdate,country,city', 'redirect_uri' => $redirect_uri,);
 		$arResult['REDIRECT_PAGE'] = $redirect_uri;
 		$x_ulogin_params = '';
 		foreach ($_uLoginDefaultOptions as $key => $value)

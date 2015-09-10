@@ -6,4 +6,5 @@ $MESS["TALKHARD_ULOGIN_OTPRAVLATQ"] = "Отправлять";
 $MESS["TALKHARD_ULOGIN_ADMINISTRATORU_PRI_R"] = "администратору при регистрации пользователя";
 $MESS["TALKHARD_ULOGIN_SYNC"] = "Панель для привязки аккаунтов";
 $MESS["TALKHARD_ULOGIN_GROUPS_MESSAGE"] = "Группа клиентов по умолчанию:";
+$MESS["TALKHARD_ULOGIN_SOCIAL"] = "Сохранять ссылку на страницу пользователя в соцсети:";
 ?>
