@@ -1,5 +1,5 @@
 <?
-Class CUloginUlogin
+Class CDelawebUlogin
 {
 	function OnBuildGlobalMenu(&$aGlobalMenu, &$aModuleMenu)
 	{

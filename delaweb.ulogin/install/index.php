@@ -1,9 +1,9 @@
 <?
 IncludeModuleLangFile(__FILE__);
 
-Class ulogin_ulogin extends CModule {
-	const MODULE_ID = 'ulogin.ulogin';
-	var $MODULE_ID = 'ulogin.ulogin';
+Class delaweb_ulogin extends CModule {
+	const MODULE_ID = 'delaweb.ulogin';
+	var $MODULE_ID = 'delaweb.ulogin';
 	var $MODULE_VERSION;
 	var $MODULE_VERSION_DATE;
 	var $MODULE_NAME;
@@ -16,14 +16,14 @@ Class ulogin_ulogin extends CModule {
 		include(dirname(__FILE__) . "/version.php");
 		$this->MODULE_VERSION = $arModuleVersion["VERSION"];
 		$this->MODULE_VERSION_DATE = $arModuleVersion["VERSION_DATE"];
-		$this->MODULE_NAME = GetMessage("ulogin.ulogin_MODULE_NAME");
-		$this->MODULE_DESCRIPTION = GetMessage("ulogin.ulogin_MODULE_DESC");
-		$this->PARTNER_NAME = GetMessage("ulogin.ulogin_PARTNER_NAME");
-		$this->PARTNER_URI = GetMessage("ulogin.ulogin_PARTNER_URI");
+		$this->MODULE_NAME = GetMessage("delaweb.ulogin_MODULE_NAME");
+		$this->MODULE_DESCRIPTION = GetMessage("delaweb.ulogin_MODULE_DESC");
+		$this->PARTNER_NAME = GetMessage("delaweb.ulogin_PARTNER_NAME");
+		$this->PARTNER_URI = GetMessage("delaweb.ulogin_PARTNER_URI");
 	}
 
 	function InstallDB($arParams = array()) {
-		RegisterModuleDependences('main', 'OnBuildGlobalMenu', self::MODULE_ID, 'CUloginUlogin', 'OnBuildGlobalMenu');
+		RegisterModuleDependences('main', 'OnBuildGlobalMenu', self::MODULE_ID, 'CDelawebUlogin', 'OnBuildGlobalMenu');
 		global $DB;
 		$DB->Query("CREATE TABLE IF NOT EXISTS ulogin_users(
 	   	id INTEGER NOT NULL auto_increment,
@@ -37,7 +37,7 @@ Class ulogin_ulogin extends CModule {
 	}
 
 	function UnInstallDB($arParams = array()) {
-		UnRegisterModuleDependences('main', 'OnBuildGlobalMenu', self::MODULE_ID, 'CUloginUlogin', 'OnBuildGlobalMenu');
+		UnRegisterModuleDependences('main', 'OnBuildGlobalMenu', self::MODULE_ID, 'CDelawebUlogin', 'OnBuildGlobalMenu');
 
 		return true;
 	}
