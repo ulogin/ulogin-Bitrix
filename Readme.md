@@ -1,6 +1,6 @@
 # uLogin
 
-Donate link: [https://ulogin.ru](https://ulogin.ru "https://ulogin.ru")
+Donate link: [https://ulogin.ru](https://ulogin.ru "https://ulogin.ru")  
 Tags: ulogin, login, social, authorization  
 Requires at least: 11.0.0  
 Tested up to: 15.5.1  
