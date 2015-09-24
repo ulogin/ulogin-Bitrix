@@ -107,10 +107,17 @@ Class delaweb_ulogin extends CModule {
 	}
 
 	function DoInstall() {
-		global $APPLICATION;
+		global $APPLICATION,$DB;
 		$this->InstallFiles();
 		$this->InstallDB();
 		RegisterModule(self::MODULE_ID);
+		$old_users = CUser::GetList(($by = "id"), ($order = "desc"), array("EXTERNAL_AUTH_ID"));
+		while($row = $old_users->Fetch()){
+			list($id,$network)= explode('=',$row['ADMIN_NOTES']);
+			if($id){
+				$DB->Query('INSERT INTO ulogin_users (id, userid, identity, network) VALUES (NULL,"' . $id . '","' . urlencode($row['EXTERNAL_AUTH_ID']) . '","' . $network . '")');
+			}
+		}
 	}
 
 	function DoUninstall() {
