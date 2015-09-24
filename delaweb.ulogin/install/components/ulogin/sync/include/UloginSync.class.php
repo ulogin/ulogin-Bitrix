@@ -260,7 +260,7 @@ class ULoginSync {
 		global $USER;
 		global $DB;
 		// данные о пользователе отсутствуют в b_users
-		$rsUsers = CUser::GetList(($by = "id"), ($order = "desc"), array("EMAIL" => $u_user['email']));
+		$rsUsers = CUser::GetList(($by = "id"), ($order = "desc"), array("EMAIL" => $u_user['email'], "ACTIVE" => "Y"));
 		$arUser = $rsUsers->GetNext();
 //		// $check_m_user == true -> есть пользователь с таким email
 		$check_m_user = $arUser['ID'] > 0 ? true : false;

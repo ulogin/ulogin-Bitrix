@@ -186,7 +186,7 @@ class Ulogin {
 		}
 		global $USER;
 		global $DB;
-		$rsUsers = CUser::GetList(($by = "id"), ($order = "desc"), array("EMAIL" => $u_user['email']));
+		$rsUsers = CUser::GetList(($by = "id"), ($order = "desc"), array("EMAIL" => $u_user['email'], "ACTIVE" => "Y"));
 		$arUser = $rsUsers->GetNext();
 		if($in_db == 1) {
 			$result = $DB->Query('DELETE FROM ulogin_users WHERE identity = "' . urlencode($u_user['identity']) . '"');

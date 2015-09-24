@@ -4,20 +4,20 @@ Class CDelawebUlogin
 	function OnBuildGlobalMenu(&$aGlobalMenu, &$aModuleMenu)
 	{
 		$MODULE_ID = basename(dirname(__FILE__));
-		$aMenu = array(
-			//"parent_menu" => "global_menu_services",
-			"parent_menu" => "global_menu_settings",
-			"section" => $MODULE_ID,
-			"sort" => 50,
-			"text" => $MODULE_ID,
-			"title" => '',
-			"url" => "partner_modules.php?module=".$MODULE_ID,
-			"icon" => "",
-			"page_icon" => "",
-			"items_id" => $MODULE_ID."_items",
-			"more_url" => array(),
-			"items" => array()
-		);
+//		$aMenu = array(
+//			//"parent_menu" => "global_menu_services",
+//			"parent_menu" => "global_menu_settings",
+//			"section" => $MODULE_ID,
+//			"sort" => 50,
+//			"text" => $MODULE_ID,
+//			"title" => '',
+//			"url" => "partner_modules.php?module=".$MODULE_ID,
+//			"icon" => "",
+//			"page_icon" => "",
+//			"items_id" => $MODULE_ID."_items",
+//			"more_url" => array(),
+//			"items" => array()
+//		);
 
 		if (file_exists($path = dirname(__FILE__).'/admin'))
 		{
