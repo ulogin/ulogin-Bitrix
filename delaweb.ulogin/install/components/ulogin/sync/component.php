@@ -9,7 +9,7 @@ global $APPLICATION;
 if(!empty($_POST['token']) && $USER->isAuthorized()) {
 	$s = UloginSync::uloginGetUserFromToken($_POST['token']);
 	if(!$s) {
-		ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => 'Ошибка работы uLogin:Не удалось получить данные о пользователе с помощью токена.'));
+		ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => GetMessage('ULOGIN_ERROR_DATA_TOKEN')));
 
 		return;
 	}

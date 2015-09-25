@@ -15,19 +15,19 @@ if (isset($identity))
     $result = $DB->Query('DELETE FROM ulogin_users WHERE identity = "'.$identity.'"');
     if ($result)
         die(json_encode(array(
-            'msg' => "Удаление аккаунта успешно выполнено",
+            'msg' => GetMessage('ULOGIN_DELETE_ACCOUNT'),
             'user' => $user_id,
             'answerType' => 'ok'
         )));
     else
         die(json_encode(array(
-            'msg' => "Ошибка при выполнении запроса на удаление",
+            'msg' => GetMessage('ULOGIN_ERROR_QUERY_DELETE'),
             'answerType' => 'error'
         )));
 }
 else
     die(json_encode(array(
-        'msg' => "Ошибка при удаление аккаунта",
+        'msg' => GetMessage('ULOGIN_ERROR_DELETE_ACCOUNT'),
         'answerType' => 'error'
     )));
 ?>

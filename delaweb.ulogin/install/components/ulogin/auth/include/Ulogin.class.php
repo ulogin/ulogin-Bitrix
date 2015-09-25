@@ -9,36 +9,36 @@ class Ulogin {
 	 */
 	public static function CheckTokenError($u_user) {
 		if(!is_array($u_user)) {
-			ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => 'Ошибка работы uLogin: Данные о пользователе содержат неверный формат.'));
+			ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => GetMessage('ULOGIN_ERROR_DATA')));
 
 			return false;
 		}
 		if(isset($u_user['error'])) {
 			$strpos = strpos($u_user['error'], 'host is not');
 			if($strpos) {
-				ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => 'Ошибка работы uLogin: адрес хоста не совпадает с оригиналом'));
+				ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => GetMessage('ULOGIN_ERROR_HOST')));
 
 				return false;
 			}
 			switch($u_user['error']) {
 				case 'token expired':
-					ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => 'Ошибка работы uLogin: время жизни токена истекло'));
+					ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => GetMessage('ULOGIN_ERROR_TIMEOUT')));
 
 					return false;
 					break;
 				case 'invalid token':
-					ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => 'Ошибка работы uLogin: неверный токен'));
+					ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => GetMessage('ULOGIN_ERROR_TOKEN')));
 
 					return false;
 					break;
 				default:
-					ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => 'Ошибка работы uLogin:'));
+					ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => GetMessage('ULOGIN_ERROR')));
 
 					return false;
 			}
 		}
 		if(!isset($u_user['identity'])) {
-			ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => 'Ошибка работы uLogin: В возвращаемых данных отсутствует переменная "identity"'));
+			ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => GetMessage('ULOGIN_ERROR_IDENTITY')));
 
 			return false;
 		}
@@ -127,8 +127,8 @@ class Ulogin {
 		global $USER;
 		$current_user = $USER->GetID();
 		if(($current_user > 0) && ($user_id > 0) && ($current_user != $user_id)) {
-			ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => 'Данный аккаунт привязан к другому пользователю. Вы не можете использовать этот аккаунт'));
-			die('<br/><a href="' . $_POST['backurl'] . '">Назад</a>');
+			ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => GetMessage('ULOGIN_ERROR_SYNC')));
+			die('<br/><a href="' . $_POST['backurl'] . '">' . GetMessage('ULOGIN_BACK') . '</a>');
 		}
 
 		return true;
@@ -180,9 +180,8 @@ class Ulogin {
 	public static function RegistrationUser($u_user, $in_db = 0, $arParams) {
 		global $APPLICATION;
 		if(!isset($u_user['email'])) {
-			ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => 'Через данную форму выполнить регистрацию невозможно. Сообщите администратору сайта о следующей ошибке:
-            Необходимо указать "email" в возвращаемых полях uLogin'));
-			die('<br/><a href="' . $_POST['backurl'] . '">Назад</a>');
+			ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => GetMessage('ULOGIN_ERROR_EMAIL')));
+			die('<br/><a href="' . $_POST['backurl'] . '">' . GetMessage('ULOGIN_BACK') . '</a>');
 		}
 		global $USER;
 		global $DB;
@@ -198,26 +197,18 @@ class Ulogin {
 			$u_user['first_name'] = isset($u_user['first_name']) ? $APPLICATION->ConvertCharset($u_user['first_name'], "UTF-8", SITE_CHARSET) : "";
 			$u_user['last_name'] = isset($u_user['last_name']) ? $APPLICATION->ConvertCharset($u_user['last_name'], "UTF-8", SITE_CHARSET) : "";
 			$u_user['nickname'] = isset($u_user['nickname']) ? $APPLICATION->ConvertCharset($u_user['nickname'], "UTF-8", SITE_CHARSET) : "";
+			var_dump($u_user['bdate']);
 			$u_user['bdate'] = isset($u_user['bdate']) ? $u_user['bdate'] : "";
 			// регистрируем пользователя
 			if(!empty($u_user['bdate'])) {//можно просто представить в другом формате стандартной функцией php
 				list($d, $m, $y) = explode('.', $u_user['bdate']);
-				$m = ($m < 10) ? '0'.$m : $m;
-				$d = ($d < 10) ? '0'.$d : $d;
+				$m = ($m < 10) ? '0' . $m : $m;
+				$d = ($d < 10) ? '0' . $d : $d;
 				$y = !empty($y) ? $y : '2000';
-				$u_user['bdate'] = $d.'.'.$m.'.'. $y;
+				$u_user['bdate'] = $d . '.' . $m . '.' . $y;
 			}
-
 			$longLogin = uLogin::ulogin_generateNickname($u_user['first_name'], $u_user['last_name']);
-			$arResult['USER'] = array(
-				'EMAIL' => $u_user['email'],
-				'PERSONAL_GENDER' => $u_user['sex'] == 2 ? 'M' : 'F',
-				'PERSONAL_CITY' => isset($u_user['city']) ? $u_user['city'] : '',
-				'PERSONAL_BIRTHDAY' => $u_user['bdate'],
-				'PHOTO' => $u_user['photo'],
-				'PHOTO_BIG' => $u_user['photo_big'],
-				'NETWORK' => $u_user['network']
-			);
+			$arResult['USER'] = array('EMAIL' => $u_user['email'], 'PERSONAL_GENDER' => $u_user['sex'] == 2 ? 'M' : 'F', 'PERSONAL_CITY' => isset($u_user['city']) ? $u_user['city'] : '', 'PERSONAL_BIRTHDAY' => $u_user['bdate'], 'PHOTO' => $u_user['photo'], 'PHOTO_BIG' => $u_user['photo_big'], 'NETWORK' => $u_user['network']);
 			if($arParams['SOCIAL_LINK'] == 'Y') {
 				$arResult['USER']['PERSONAL_WWW'] = isset($u_user['profile']) ? $u_user['profile'] : '';
 			}
@@ -240,43 +231,19 @@ class Ulogin {
 				$arIMAGE["MODULE_ID"] = "main";
 			}
 			$user = new CUser;
-			$arFields = array(
-				"NAME" => $u_user['first_name'],
-				"LAST_NAME" => $u_user['last_name'],
-				"EMAIL" => $u_user['email'],
-				"LOGIN" => $longLogin,
-				"ACTIVE" => "Y",
-				"GROUP_ID" => array(5),
-				"PASSWORD" => $passw,
-				"CONFIRM_PASSWORD" => $passw,
-				"PERSONAL_PHOTO" => $arIMAGE,
-				'PERSONAL_GENDER' => $u_user['sex'] == 2 ? 'M' : 'F',
-				'PERSONAL_CITY' => isset($u_user['city']) ? $u_user['city'] : '',
-				'PERSONAL_BIRTHDAY' => $u_user['bdate'],
-				'PERSONAL_PHONE' => isset($u_user['phone']) ? $u_user['phone'] : '',
-				'PERSONAL_COUNTRY' => isset($u_user['country']) ? $u_user['country'] : '',
-			);
+			$arFields = array("NAME" => $u_user['first_name'], "LAST_NAME" => $u_user['last_name'], "EMAIL" => $u_user['email'], "LOGIN" => $longLogin, "ACTIVE" => "Y", "GROUP_ID" => array(5), "PASSWORD" => $passw, "CONFIRM_PASSWORD" => $passw, "PERSONAL_PHOTO" => $arIMAGE, 'PERSONAL_GENDER' => $u_user['sex'] == 2 ? 'M' : 'F', 'PERSONAL_CITY' => isset($u_user['city']) ? $u_user['city'] : '', 'PERSONAL_BIRTHDAY' => $u_user['bdate'], 'PERSONAL_PHONE' => isset($u_user['phone']) ? $u_user['phone'] : '', 'PERSONAL_COUNTRY' => isset($u_user['country']) ? $u_user['country'] : '',);
 			if($arParams['SOCIAL_LINK'] == 'Y') {
 				$arFields['PERSONAL_WWW'] = isset($u_user['profile']) ? $u_user['profile'] : '';
 			}
-
 			$UserID = $user->Add($arFields);
 			if($UserID > 0) {
 				$result = $DB->Query('INSERT INTO ulogin_users (id, userid, identity, network) VALUES (NULL,"' . $UserID . '","' . urlencode($u_user['identity']) . '","' . $u_user['network'] . '")');
 			} else {
-				ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => 'Ошибка регистрации: Не удалось зарегистрировать пользователя.'));
-				die('<br/><a href="' . $_POST['backurl'] . '">Назад</a>');
+				ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => GetMessage('ULOGIN_ERROR_REGISTER')));
+				die('<br/><a href="' . $_POST['backurl'] . '">' . GetMessage('ULOGIN_BACK') . '</a>');
 			}
 			if($UserID && $arParams['SEND_EMAIL'] == 'Y') {
-				$arEventFields = array(
-					'USER_ID' => $UserID,
-					'LOGIN' => $arFields['LOGIN'],
-					'EMAIL' => $arFields['EMAIL'],
-					'NAME' => $arFields['NAME'],
-					'LAST_NAME' => $arFields['LAST_NAME'],
-					'USER_IP' => '',
-					'USER_HOST' => ''
-				);
+				$arEventFields = array('USER_ID' => $UserID, 'LOGIN' => $arFields['LOGIN'], 'EMAIL' => $arFields['EMAIL'], 'NAME' => $arFields['NAME'], 'LAST_NAME' => $arFields['LAST_NAME'], 'USER_IP' => '', 'USER_HOST' => '');
 				$event = new CEvent;
 				$msg = $event->SendImmediate("NEW_USER", SITE_ID, $arEventFields);
 				ShowMessage($msg);
@@ -286,7 +253,7 @@ class Ulogin {
 			return $UserID;
 		} else {
 			if(!isset($u_user["verified_email"]) || intval($u_user["verified_email"]) != 1) {
-				die('<script src="//ulogin.ru/js/ulogin.js"  type="text/javascript"></script><script type="text/javascript">uLogin.mergeAccounts("' . $_POST['token'] . '")</script>' . 'Электронный адрес данного аккаунта совпадает с электронным адресом существующего пользователя. Требуется подтверждение на владение указанным email.' . '<br/><a href="' . $_POST['backurl'] . '">Назад</a>');
+				die('<script src="//ulogin.ru/js/ulogin.js"  type="text/javascript"></script><script type="text/javascript">uLogin.mergeAccounts("' . $_POST['token'] . '")</script>' . GetMessage('ULOGIN_ERROR_SYNC_CONFIRM') . '<br/><a href="' . $_POST['backurl'] . '">' . GetMessage('ULOGIN_BACK') . '</a>');
 			}
 			if(intval($u_user["verified_email"]) == 1) {
 				$user_id = $arUser['ID'];
@@ -299,7 +266,7 @@ class Ulogin {
 				}
 				if($other) {
 					if(!isset($u_user['merge_account'])) {
-						die('<script src="//ulogin.ru/js/ulogin.js"  type="text/javascript"></script><script type="text/javascript">uLogin.mergeAccounts("' . $_POST['token'] . '","' . $other[$key] . '")</script>' . 'С данным аккаунтом уже связаны данные из другой социальной сети. Требуется привязка новой учётной записи социальной сети к этому аккаунту' . '<br/><a href="' . $_POST['backurl'] . '">Назад</a>');
+						die('<script src="//ulogin.ru/js/ulogin.js"  type="text/javascript"></script><script type="text/javascript">uLogin.mergeAccounts("' . $_POST['token'] . '","' . $other[$key] . '")</script>' . GetMessage('ULOGIN_ERROR_SYNC_MERGE') . '<br/><a href="' . $_POST['backurl'] . '">' . GetMessage('ULOGIN_BACK') . '</a>');
 					}
 				}
 			}
@@ -325,4 +292,3 @@ class Ulogin {
 }
 
 ?>
-
