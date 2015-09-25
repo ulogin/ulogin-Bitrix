@@ -198,7 +198,6 @@ class Ulogin {
 			$u_user['first_name'] = isset($u_user['first_name']) ? $APPLICATION->ConvertCharset($u_user['first_name'], "UTF-8", SITE_CHARSET) : "";
 			$u_user['last_name'] = isset($u_user['last_name']) ? $APPLICATION->ConvertCharset($u_user['last_name'], "UTF-8", SITE_CHARSET) : "";
 			$u_user['nickname'] = isset($u_user['nickname']) ? $APPLICATION->ConvertCharset($u_user['nickname'], "UTF-8", SITE_CHARSET) : "";
-			var_dump($u_user['bdate']);
 			$u_user['bdate'] = isset($u_user['bdate']) ? $u_user['bdate'] : "";
 			// регистрируем пользователя
 			if(!empty($u_user['bdate'])) {//можно просто представить в другом формате стандартной функцией php
