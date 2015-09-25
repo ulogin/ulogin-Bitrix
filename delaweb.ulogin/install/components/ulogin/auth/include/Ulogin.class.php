@@ -183,21 +183,22 @@ class Ulogin {
 			ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => GetMessage('ULOGIN_ERROR_EMAIL')));
 			die('<br/><a href="' . $_POST['backurl'] . '">' . GetMessage('ULOGIN_BACK') . '</a>');
 		}
-		global $USER;
 		global $DB;
-		$rsUsers = CUser::GetList(($by = "id"), ($order = "desc"), array("EMAIL" => $u_user['email'], "ACTIVE" => "Y"));
-		$arUser = $rsUsers->GetNext();
 		if($in_db == 1) {
 			$result = $DB->Query('DELETE FROM ulogin_users WHERE identity = "' . urlencode($u_user['identity']) . '"');
 		}
-//		// $check_m_user == true -> есть пользователь с таким email
+		$rsUsers = CUser::GetList(($by = "id"), ($order = "desc"), array("EMAIL" => $u_user['email'], "ACTIVE" => "Y"));
+		$arUser = $rsUsers->GetNext();
+//		$check_m_user == true -> есть пользователь с таким email
 		$check_m_user = $arUser['ID'] > 0 ? true : false;
+		global $USER;
 		$current_user = $USER->GetID();
-		if($check_m_user == false) {
+		// $isLoggedIn == true -> ползователь онлайн
+		$isLoggedIn = $current_user > 0 ? true : false;
+		if(!$check_m_user && !$isLoggedIn) {
 			$u_user['first_name'] = isset($u_user['first_name']) ? $APPLICATION->ConvertCharset($u_user['first_name'], "UTF-8", SITE_CHARSET) : "";
 			$u_user['last_name'] = isset($u_user['last_name']) ? $APPLICATION->ConvertCharset($u_user['last_name'], "UTF-8", SITE_CHARSET) : "";
 			$u_user['nickname'] = isset($u_user['nickname']) ? $APPLICATION->ConvertCharset($u_user['nickname'], "UTF-8", SITE_CHARSET) : "";
-			var_dump($u_user['bdate']);
 			$u_user['bdate'] = isset($u_user['bdate']) ? $u_user['bdate'] : "";
 			// регистрируем пользователя
 			if(!empty($u_user['bdate'])) {//можно просто представить в другом формате стандартной функцией php
@@ -252,29 +253,32 @@ class Ulogin {
 
 			return $UserID;
 		} else {
+
 			if(!isset($u_user["verified_email"]) || intval($u_user["verified_email"]) != 1) {
 				die('<script src="//ulogin.ru/js/ulogin.js"  type="text/javascript"></script><script type="text/javascript">uLogin.mergeAccounts("' . $_POST['token'] . '")</script>' . GetMessage('ULOGIN_ERROR_SYNC_CONFIRM') . '<br/><a href="' . $_POST['backurl'] . '">' . GetMessage('ULOGIN_BACK') . '</a>');
 			}
 			if(intval($u_user["verified_email"]) == 1) {
-				$user_id = $arUser['ID'];
+				$user_id = $isLoggedIn ? $current_user : $arUser['ID'];
 				$other_u = $DB->Query('SELECT identity,network FROM ulogin_users WHERE userid = "' . $user_id . '"');
 				$other = array();
 				while($row = $other_u->Fetch()) {
 					$ident = $row['identity'];
 					$key = $row['network'];
-					$other[$key] = $ident;
+					$other['identity'] = $ident;
 				}
+
 				if($other) {
-					if(!isset($u_user['merge_account'])) {
-						die('<script src="//ulogin.ru/js/ulogin.js"  type="text/javascript"></script><script type="text/javascript">uLogin.mergeAccounts("' . $_POST['token'] . '","' . $other[$key] . '")</script>' . GetMessage('ULOGIN_ERROR_SYNC_MERGE') . '<br/><a href="' . $_POST['backurl'] . '">' . GetMessage('ULOGIN_BACK') . '</a>');
+					if(!$isLoggedIn && !isset($u_user['merge_account'])) {
+						die('<script src="//ulogin.ru/js/ulogin.js"  type="text/javascript"></script><script type="text/javascript">uLogin.mergeAccounts("' . $_POST['token'] . '","' . $other['identity'] . '")</script>' . GetMessage('ULOGIN_ERROR_SYNC_MERGE') . '<br/><a href="' . $_POST['backurl'] . '">' . GetMessage('ULOGIN_BACK') . '</a>');
 					}
 				}
-			}
-			$result = $DB->Query('INSERT INTO ulogin_users (id, userid, identity, network) VALUES (NULL,"' . $arUser['ID'] . '","' . urlencode($u_user['identity']) . '","' . $u_user['network'] . '")');
-			$result = $result->GetNext();
+				$DB->Query('INSERT INTO ulogin_users (id, userid, identity, network) VALUES (NULL,"' . $user_id . '","' . urlencode($u_user['identity']) . '","' . $u_user['network'] . '")');
 
-			return $arUser['ID'];
+				return $user_id;
+			}
 		}
+
+		return false;
 	}
 
 	/**

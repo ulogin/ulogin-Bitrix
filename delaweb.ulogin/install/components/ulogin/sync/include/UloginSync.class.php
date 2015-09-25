@@ -221,48 +221,49 @@ class ULoginSync {
 	 * @param int $in_db - при значении 1 необходимо переписать данные в таблице uLogin
 	 * @return bool|int|Error
 	 */
-	public static function RegistrationUser($u_user, $arParams) {
+	public static function RegistrationUser($u_user, $in_db = 0, $arParams) {
 		if(!isset($u_user['email'])) {
 			ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => GetMessage('ULOGIN_ERROR_EMAIL')));
 			die('<br/><a href="' . $_POST['backurl'] . '">' . GetMessage('ULOGIN_BACK') . '</a>');
 		}
-		global $USER;
 		global $DB;
-		// данные о пользователе отсутствуют в b_users
+		if($in_db == 1) {
+			$result = $DB->Query('DELETE FROM ulogin_users WHERE identity = "' . urlencode($u_user['identity']) . '"');
+		}
 		$rsUsers = CUser::GetList(($by = "id"), ($order = "desc"), array("EMAIL" => $u_user['email'], "ACTIVE" => "Y"));
 		$arUser = $rsUsers->GetNext();
-//		// $check_m_user == true -> есть пользователь с таким email
+//		$check_m_user == true -> есть пользователь с таким email
 		$check_m_user = $arUser['ID'] > 0 ? true : false;
+		global $USER;
 		$current_user = $USER->GetID();
-		if($check_m_user) {
+		// $isLoggedIn == true -> ползователь онлайн
+		$isLoggedIn = $current_user > 0 ? true : false;
+		if(!$check_m_user && !$isLoggedIn) {
+		} else {
 			if(!isset($u_user["verified_email"]) || intval($u_user["verified_email"]) != 1) {
 				die('<script src="//ulogin.ru/js/ulogin.js"  type="text/javascript"></script><script type="text/javascript">uLogin.mergeAccounts("' . $_POST['token'] . '")</script>' . GetMessage('ULOGIN_ERROR_SYNC_CONFIRM') . '<br/><a href="' . $_POST['backurl'] . '">' . GetMessage('ULOGIN_BACK') . '</a>');
 			}
 			if(intval($u_user["verified_email"]) == 1) {
-				$user_id = $current_user;
+				$user_id = $isLoggedIn ? $current_user : $arUser['ID'];
 				$other_u = $DB->Query('SELECT identity,network FROM ulogin_users WHERE userid = "' . $user_id . '"');
 				$other = array();
 				while($row = $other_u->Fetch()) {
 					$ident = $row['identity'];
 					$key = $row['network'];
-					$other[$key] = $ident;
+					$other['identity'] = $ident;
 				}
 				if($other) {
-					if(!isset($u_user['merge_account'])) {
-						die('<script src="//ulogin.ru/js/ulogin.js"  type="text/javascript"></script><script type="text/javascript">uLogin.mergeAccounts("' . $_POST['token'] . '","' . $other[$key] . '")</script>' . GetMessage('ULOGIN_ERROR_SYNC_MERGE') . '<br/><a href="' . $_POST['backurl'] . '">' . GetMessage('ULOGIN_BACK') . '</a>');
+					if(!$isLoggedIn && !isset($u_user['merge_account'])) {
+						die('<script src="//ulogin.ru/js/ulogin.js"  type="text/javascript"></script><script type="text/javascript">uLogin.mergeAccounts("' . $_POST['token'] . '","' . $other['identity'] . '")</script>' . GetMessage('ULOGIN_ERROR_SYNC_MERGE') . '<br/><a href="' . $_POST['backurl'] . '">' . GetMessage('ULOGIN_BACK') . '</a>');
 					}
 				}
+				$result = $DB->Query('INSERT INTO ulogin_users (id, userid, identity, network) VALUES (NULL,"' . $user_id . '","' . urlencode($u_user['identity']) . '","' . $u_user['network'] . '")');
+
+				return $user_id;
 			}
-			$result = $DB->Query('INSERT INTO ulogin_users (id, userid, identity, network) VALUES (NULL,"' . $current_user . '","' . urlencode($u_user['identity']) . '","' . $u_user['network'] . '")');
-			$result = $result->GetNext();
-
-			return $result['id'];
-		} else {
-			$result = $DB->Query('INSERT INTO ulogin_users (id, userid, identity, network) VALUES (NULL,"' . $current_user . '","' . urlencode($u_user['identity']) . '","' . $u_user['network'] . '")');
-			$result = $result->GetNext();
-
-			return $result['id'];
 		}
+
+		return false;
 	}
 
 	/**
