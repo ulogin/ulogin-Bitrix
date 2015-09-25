@@ -55,7 +55,7 @@
                     identity: identity
                 },
                 error: function (data, textStatus, errorThrown) {
-                    alert('Не удалось выполнить запрос');
+                    alert(<?=GetMessage("ULOGIN_SYNC_ERROR_QUERY")?>);
                 },
                 success: function (data) {
                     switch (data.answerType) {
