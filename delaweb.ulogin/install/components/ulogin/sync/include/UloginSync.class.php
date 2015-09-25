@@ -138,11 +138,6 @@ class ULoginSync {
 		}
 	}
 
-	public static function updateuLoginAccount($id, $new_id, $network) {
-		$user = new CUser;
-		$user->Update($id, array('ADMIN_NOTES' => $network . '=' . $new_id));
-	}
-
 	/**
 	 * Транслит
 	 */
