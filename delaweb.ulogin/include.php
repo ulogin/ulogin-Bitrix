@@ -1,8 +1,7 @@
 <?
-Class CDelawebUlogin
-{
-	function OnBuildGlobalMenu(&$aGlobalMenu, &$aModuleMenu)
-	{
+
+Class CDelawebUlogin {
+	function OnBuildGlobalMenu(&$aGlobalMenu, &$aModuleMenu) {
 		$MODULE_ID = basename(dirname(__FILE__));
 //		$aMenu = array(
 //			//"parent_menu" => "global_menu_services",
@@ -18,36 +17,23 @@ Class CDelawebUlogin
 //			"more_url" => array(),
 //			"items" => array()
 //		);
-
-		if (file_exists($path = dirname(__FILE__).'/admin'))
-		{
-			if ($dir = opendir($path))
-			{
+		if(file_exists($path = dirname(__FILE__) . '/admin')) {
+			if($dir = opendir($path)) {
 				$arFiles = array();
-
-				while(false !== $item = readdir($dir))
-				{
-					if (in_array($item,array('.','..','menu.php')))
+				while(false !== $item = readdir($dir)) {
+					if(in_array($item, array('.', '..', 'menu.php')))
 						continue;
-
-					if (!file_exists($file = $_SERVER['DOCUMENT_ROOT'].'/bitrix/admin/'.$MODULE_ID.'_'.$item))
-						file_put_contents($file,'<'.'? require($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/'.$MODULE_ID.'/admin/'.$item.'");?'.'>');
-
+					if(!file_exists($file = $_SERVER['DOCUMENT_ROOT'] . '/bitrix/admin/' . $MODULE_ID . '_' . $item))
+						file_put_contents($file, '<' . '? require($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/' . $MODULE_ID . '/admin/' . $item . '");?' . '>');
 					$arFiles[] = $item;
 				}
-
 				sort($arFiles);
-
 				foreach($arFiles as $item)
-					$aMenu['items'][] = array(
-						'text' => $item,
-						'url' => $MODULE_ID.'_'.$item,
-						'module_id' => $MODULE_ID,
-						"title" => "",
-					);
+					$aMenu['items'][] = array('text' => $item, 'url' => $MODULE_ID . '_' . $item, 'module_id' => $MODULE_ID, "title" => "",);
 			}
 		}
 		$aModuleMenu[] = $aMenu;
 	}
 }
+
 ?>
