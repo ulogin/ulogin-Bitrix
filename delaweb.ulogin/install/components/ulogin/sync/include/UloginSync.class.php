@@ -3,64 +3,60 @@
 class ULoginSync {
 
 	/**
-	 * РџСЂРѕРІРµСЂРєР° РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёС… РґР°РЅРЅС‹С…, РїРѕР»СѓС‡РµРЅРЅС‹С… РїРѕ С‚РѕРєРµРЅСѓ
-	 *
-	 * @param $u_user - РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёРµ РґР°РЅРЅС‹Рµ
-	 *
+	 * Проверка пользовательских данных, полученных по токену
+	 * @param $u_user - пользовательские данные
 	 * @return bool
 	 */
-	public static function CheckTokenError($u_user)
-	{
-		if (!is_array($u_user))
-		{
-			ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => 'РћС€РёР±РєР° СЂР°Р±РѕС‚С‹ uLogin: Р”Р°РЅРЅС‹Рµ Рѕ РїРѕР»СЊР·РѕРІР°С‚РµР»Рµ СЃРѕРґРµСЂР¶Р°С‚ РЅРµРІРµСЂРЅС‹Р№ С„РѕСЂРјР°С‚.'));
+	public static function CheckTokenError($u_user) {
+		if(!is_array($u_user)) {
+			ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => GetMessage('ULOGIN_ERROR_DATA')));
+
 			return false;
 		}
-		if (isset($u_user['error']))
-		{
+		if(isset($u_user['error'])) {
 			$strpos = strpos($u_user['error'], 'host is not');
-			if ($strpos)
-			{
-				ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => 'РћС€РёР±РєР° СЂР°Р±РѕС‚С‹ uLogin: Р°РґСЂРµСЃ С…РѕСЃС‚Р° РЅРµ СЃРѕРІРїР°РґР°РµС‚ СЃ РѕСЂРёРіРёРЅР°Р»РѕРј'));
+			if($strpos) {
+				ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => GetMessage('ULOGIN_ERROR_HOST')));
+
 				return false;
 			}
-			switch ($u_user['error'])
-			{
+			switch($u_user['error']) {
 				case 'token expired':
-					ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => 'РћС€РёР±РєР° СЂР°Р±РѕС‚С‹ uLogin: РІСЂРµРјСЏ Р¶РёР·РЅРё С‚РѕРєРµРЅР° РёСЃС‚РµРєР»Рѕ'));
+					ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => GetMessage('ULOGIN_ERROR_TIMEOUT')));
+
 					return false;
 					break;
 				case 'invalid token':
-					ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => 'РћС€РёР±РєР° СЂР°Р±РѕС‚С‹ uLogin: РЅРµРІРµСЂРЅС‹Р№ С‚РѕРєРµРЅ'));
+					ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => GetMessage('ULOGIN_ERROR_TOKEN')));
+
 					return false;
 					break;
 				default:
-					ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => 'РћС€РёР±РєР° СЂР°Р±РѕС‚С‹ uLogin:'));
+					ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => GetMessage('ULOGIN_ERROR')));
+
 					return false;
 			}
 		}
-		if (!isset($u_user['identity']))
-		{
-			ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => 'РћС€РёР±РєР° СЂР°Р±РѕС‚С‹ uLogin: Р’ РІРѕР·РІСЂР°С‰Р°РµРјС‹С… РґР°РЅРЅС‹С… РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚ РїРµСЂРµРјРµРЅРЅР°СЏ "identity"'));
+		if(!isset($u_user['identity'])) {
+			ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => GetMessage('ULOGIN_ERROR_IDENTITY')));
+
 			return false;
 		}
+
 		return true;
 	}
 
 	/**
-	 * Р“РЅРµСЂР°С†РёСЏ Р»РѕРіРёРЅР° РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
-	 * РІ СЃР»СѓС‡Р°Рµ СѓСЃРїРµС€РЅРѕРіРѕ РІС‹РїРѕР»РЅРµРЅРёСЏ РІРѕР·РІСЂР°С‰Р°РµС‚ СѓРЅРёРєР°Р»СЊРЅС‹Р№ Р»РѕРіРёРЅ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
-	 *
+	 * Гнерация логина пользователя
+	 * в случае успешного выполнения возвращает уникальный логин пользователя
 	 * @param $first_name
 	 * @param string $last_name
 	 * @param string $nickname
 	 * @param string $bdate
 	 * @param array $delimiters
-	 *
 	 * @return string
 	 */
-	public static function generateNickname($profile)
-	{
+	public static function generateNickname($profile) {
 		$first_name = $profile['first_name'];
 		$last_name = isset($profile['last_name']) ? $profile['last_name'] : '';
 		$nickname = isset($profile['nickname']) ? $profile['nickname'] : '';
@@ -70,288 +66,255 @@ class ULoginSync {
 		$first_name = uLogin::uLoginTranslitIt($first_name);
 		$first_name_s = substr($first_name, 0, 1);
 		$variants = array();
-		if (!empty($nickname)) $variants[] = $nickname;
+		if(!empty($nickname))
+			$variants[] = $nickname;
 		$variants[] = $first_name;
-		if (!empty($last_name))
-		{
+		if(!empty($last_name)) {
 			$last_name = uLogin::uLoginTranslitIt($last_name);
-			$variants[] = $first_name.$delim.$last_name;
-			$variants[] = $last_name.$delim.$first_name;
-			$variants[] = $first_name_s.$delim.$last_name;
-			$variants[] = $first_name_s.$last_name;
-			$variants[] = $last_name.$delim.$first_name_s;
-			$variants[] = $last_name.$first_name_s;
+			$variants[] = $first_name . $delim . $last_name;
+			$variants[] = $last_name . $delim . $first_name;
+			$variants[] = $first_name_s . $delim . $last_name;
+			$variants[] = $first_name_s . $last_name;
+			$variants[] = $last_name . $delim . $first_name_s;
+			$variants[] = $last_name . $first_name_s;
 		}
-		if (!empty($bdate))
-		{
+		if(!empty($bdate)) {
 			$date = explode('.', $bdate);
-			$variants[] = $first_name.$date[2];
-			$variants[] = $first_name.$delim.$date[2];
-			$variants[] = $first_name.$date[0].$date[1];
-			$variants[] = $first_name.$delim.$date[0].$date[1];
-			$variants[] = $first_name.$delim.$last_name.$date[2];
-			$variants[] = $first_name.$delim.$last_name.$delim.$date[2];
-			$variants[] = $first_name.$delim.$last_name.$date[0].$date[1];
-			$variants[] = $first_name.$delim.$last_name.$delim.$date[0].$date[1];
-			$variants[] = $last_name.$delim.$first_name.$date[2];
-			$variants[] = $last_name.$delim.$first_name.$delim.$date[2];
-			$variants[] = $last_name.$delim.$first_name.$date[0].$date[1];
-			$variants[] = $last_name.$delim.$first_name.$delim.$date[0].$date[1];
-			$variants[] = $first_name_s.$delim.$last_name.$date[2];
-			$variants[] = $first_name_s.$delim.$last_name.$delim.$date[2];
-			$variants[] = $first_name_s.$delim.$last_name.$date[0].$date[1];
-			$variants[] = $first_name_s.$delim.$last_name.$delim.$date[0].$date[1];
-			$variants[] = $last_name.$delim.$first_name_s.$date[2];
-			$variants[] = $last_name.$delim.$first_name_s.$delim.$date[2];
-			$variants[] = $last_name.$delim.$first_name_s.$date[0].$date[1];
-			$variants[] = $last_name.$delim.$first_name_s.$delim.$date[0].$date[1];
-			$variants[] = $first_name_s.$last_name.$date[2];
-			$variants[] = $first_name_s.$last_name.$delim.$date[2];
-			$variants[] = $first_name_s.$last_name.$date[0].$date[1];
-			$variants[] = $first_name_s.$last_name.$delim.$date[0].$date[1];
-			$variants[] = $last_name.$first_name_s.$date[2];
-			$variants[] = $last_name.$first_name_s.$delim.$date[2];
-			$variants[] = $last_name.$first_name_s.$date[0].$date[1];
-			$variants[] = $last_name.$first_name_s.$delim.$date[0].$date[1];
+			$variants[] = $first_name . $date[2];
+			$variants[] = $first_name . $delim . $date[2];
+			$variants[] = $first_name . $date[0] . $date[1];
+			$variants[] = $first_name . $delim . $date[0] . $date[1];
+			$variants[] = $first_name . $delim . $last_name . $date[2];
+			$variants[] = $first_name . $delim . $last_name . $delim . $date[2];
+			$variants[] = $first_name . $delim . $last_name . $date[0] . $date[1];
+			$variants[] = $first_name . $delim . $last_name . $delim . $date[0] . $date[1];
+			$variants[] = $last_name . $delim . $first_name . $date[2];
+			$variants[] = $last_name . $delim . $first_name . $delim . $date[2];
+			$variants[] = $last_name . $delim . $first_name . $date[0] . $date[1];
+			$variants[] = $last_name . $delim . $first_name . $delim . $date[0] . $date[1];
+			$variants[] = $first_name_s . $delim . $last_name . $date[2];
+			$variants[] = $first_name_s . $delim . $last_name . $delim . $date[2];
+			$variants[] = $first_name_s . $delim . $last_name . $date[0] . $date[1];
+			$variants[] = $first_name_s . $delim . $last_name . $delim . $date[0] . $date[1];
+			$variants[] = $last_name . $delim . $first_name_s . $date[2];
+			$variants[] = $last_name . $delim . $first_name_s . $delim . $date[2];
+			$variants[] = $last_name . $delim . $first_name_s . $date[0] . $date[1];
+			$variants[] = $last_name . $delim . $first_name_s . $delim . $date[0] . $date[1];
+			$variants[] = $first_name_s . $last_name . $date[2];
+			$variants[] = $first_name_s . $last_name . $delim . $date[2];
+			$variants[] = $first_name_s . $last_name . $date[0] . $date[1];
+			$variants[] = $first_name_s . $last_name . $delim . $date[0] . $date[1];
+			$variants[] = $last_name . $first_name_s . $date[2];
+			$variants[] = $last_name . $first_name_s . $delim . $date[2];
+			$variants[] = $last_name . $first_name_s . $date[0] . $date[1];
+			$variants[] = $last_name . $first_name_s . $delim . $date[0] . $date[1];
 		}
 		$i = 0;
 		$exist = true;
-		while (true)
-		{
-			if ($exist = uLogin::uLogin_userExist($variants[$i]) && strlen($variants[$i]) < 4)
-			{
-				foreach ($delimiters as $del)
-				{
+		while(true) {
+			if($exist = uLogin::uLogin_userExist($variants[$i]) && strlen($variants[$i]) < 4) {
+				foreach($delimiters as $del) {
 					$replaced = str_replace($delim, $del, $variants[$i]);
-					if ($replaced !== $variants[$i])
-					{
+					if($replaced !== $variants[$i]) {
 						$variants[$i] = $replaced;
-						if (!$exist = uLogin::uLogin_userExist($variants[$i])) break;
+						if(!$exist = uLogin::uLogin_userExist($variants[$i]))
+							break;
 					}
 				}
 			}
-			if ($i >= count($variants) - 1 || !$exist) break;
+			if($i >= count($variants) - 1 || !$exist)
+				break;
 			$i++;
 		}
-		if ($exist)
-		{
-			while ($exist)
-			{
-				$nickname = $first_name.mt_rand(1, 100000);
+		if($exist) {
+			while($exist) {
+				$nickname = $first_name . mt_rand(1, 100000);
 				$exist = uLogin::uLogin_userExist($nickname);
 			}
+
 			return iconv('utf-8', 'windows-1251', $nickname);
-		}
-		else
-		{
+		} else {
 			return iconv('utf-8', 'windows-1251', $variants[$i]);
 		}
 	}
 
-	public static function updateuLoginAccount($id, $new_id, $network)
-	{
+	public static function updateuLoginAccount($id, $new_id, $network) {
 		$user = new CUser;
-		$user->Update($id, array('ADMIN_NOTES' => $network.'='.$new_id));
+		$user->Update($id, array('ADMIN_NOTES' => $network . '=' . $new_id));
 	}
 
 	/**
-	 * РўСЂР°РЅСЃР»РёС‚
+	 * Транслит
 	 */
-	public static function uLoginTranslitIt($str)
-	{
-		$tr = array("Рђ" => "a", "Р‘" => "b", "Р’" => "v", "Р“" => "g", "Р”" => "d", "Р•" => "e", "Р–" => "j", "Р—" => "z", "Р" => "i", "Р™" => "y", "Рљ" => "k", "Р›" => "l", "Рњ" => "m", "Рќ" => "n", "Рћ" => "o", "Рџ" => "p", "Р " => "r", "РЎ" => "s", "Рў" => "t", "РЈ" => "u", "Р¤" => "f", "РҐ" => "h", "Р¦" => "ts", "Р§" => "ch", "РЁ" => "sh", "Р©" => "sch", "РЄ" => "", "Р«" => "yi", "Р¬" => "", "Р­" => "e", "Р®" => "yu", "РЇ" => "ya", "Р°" => "a", "Р±" => "b", "РІ" => "v", "Рі" => "g", "Рґ" => "d", "Рµ" => "e", "Р¶" => "j", "Р·" => "z", "Рё" => "i", "Р№" => "y", "Рє" => "k", "Р»" => "l", "Рј" => "m", "РЅ" => "n", "Рѕ" => "o", "Рї" => "p", "СЂ" => "r", "СЃ" => "s", "С‚" => "t", "Сѓ" => "u", "С„" => "f", "С…" => "h", "С†" => "ts", "С‡" => "ch", "С€" => "sh", "С‰" => "sch", "СЉ" => "y", "С‹" => "y", "СЊ" => "", "СЌ" => "e", "СЋ" => "yu", "СЏ" => "ya");
-		if (preg_match('/[^A-Za-z0-9\_\-]/', $str))
-		{
+	public static function uLoginTranslitIt($str) {
+		$tr = array("А" => "a", "Б" => "b", "В" => "v", "Г" => "g", "Д" => "d", "Е" => "e", "Ж" => "j", "З" => "z", "И" => "i", "Й" => "y", "К" => "k", "Л" => "l", "М" => "m", "Н" => "n", "О" => "o", "П" => "p", "Р" => "r", "С" => "s", "Т" => "t", "У" => "u", "Ф" => "f", "Х" => "h", "Ц" => "ts", "Ч" => "ch", "Ш" => "sh", "Щ" => "sch", "Ъ" => "", "Ы" => "yi", "Ь" => "", "Э" => "e", "Ю" => "yu", "Я" => "ya", "а" => "a", "б" => "b", "в" => "v", "г" => "g", "д" => "d", "е" => "e", "ж" => "j", "з" => "z", "и" => "i", "й" => "y", "к" => "k", "л" => "l", "м" => "m", "н" => "n", "о" => "o", "п" => "p", "р" => "r", "с" => "s", "т" => "t", "у" => "u", "ф" => "f", "х" => "h", "ц" => "ts", "ч" => "ch", "ш" => "sh", "щ" => "sch", "ъ" => "y", "ы" => "y", "ь" => "", "э" => "e", "ю" => "yu", "я" => "ya");
+		if(preg_match('/[^A-Za-z0-9\_\-]/', $str)) {
 			$str = strtr($str, $tr);
 			$str = preg_replace('/[^A-Za-z0-9\_\-\.]/', '', $str);
 		}
+
 		return $str;
 	}
 
 	/**
-	 * РџСЂРѕРІРµСЂРєР° СЃСѓС‰РµСЃС‚РІСѓРµС‚ Р»Рё РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ СЃ Р·Р°РґР°РЅРЅС‹Рј Р»РѕРіРёРЅРѕРј
+	 * Проверка существует ли пользователь с заданным логином
 	 */
-	public function ulogin_userExist($login)
-	{
+	public function ulogin_userExist($login) {
 		$loginUsers = CUser::GetList(($by = "id"), ($order = "desc"), array("LOGIN" => $login, "ACTIVE" => "Y")); //$login
-		if ($loginUsers->SelectedRowsCount() > 0)
-		{
+		if($loginUsers->SelectedRowsCount() > 0) {
 			return false;
 		}
+
 		return true;
 	}
 
 	/**
 	 * @param $user_id
-	 *
 	 * @return bool
 	 */
-	public function uloginCheckUserId($user_id)
-	{
+	public function uloginCheckUserId($user_id) {
 		global $USER;
 		$current_user = $USER->GetID();
-		if (($current_user > 0) && ($user_id > 0) && ($current_user != $user_id))
-		{
-			ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => 'Р”Р°РЅРЅС‹Р№ Р°РєРєР°СѓРЅС‚ РїСЂРёРІСЏР·Р°РЅ Рє РґСЂСѓРіРѕРјСѓ РїРѕР»СЊР·РѕРІР°С‚РµР»СЋ. Р’С‹ РЅРµ РјРѕР¶РµС‚Рµ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ СЌС‚РѕС‚ Р°РєРєР°СѓРЅС‚'));
-			die('<a href="'.$_POST['backurl'].'">РќР°Р·Р°Рґ</a>');
+		if(($current_user > 0) && ($user_id > 0) && ($current_user != $user_id)) {
+			ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => GetMessage('ULOGIN_ERROR_SYNC')));
+			die('<a href="' . $_POST['backurl'] . '">' . GetMessage('ULOGIN_BACK') . '</a>');
 		}
+
 		return true;
 	}
 
 	/**
-	 * РїСЂРѕРІРµСЂРєР° СѓРЅРёРєР°Р»СЊРЅРѕСЃС‚Рё email
+	 * проверка уникальности email
 	 */
-	public static function check($arParams)
-	{
-		if ($arParams['UNIQUE_EMAIL'] == 'Y')
-		{
+	public static function check($arParams) {
+		if($arParams['UNIQUE_EMAIL'] == 'Y') {
 			$emailUsers = CUser::GetList(($by = "id"), ($order = "desc"), array("EMAIL" => $arParams['USER']["EMAIL"], "ACTIVE" => "Y"));
-			if (intval($emailUsers->SelectedRowsCount()) > 0)
-			{
+			if(intval($emailUsers->SelectedRowsCount()) > 0) {
 				return true;
 			}
 		}
+
 		return false;
 	}
 
 	/**
-	 * РћР±РјРµРЅРёРІР°РµС‚ С‚РѕРєРµРЅ РЅР° РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёРµ РґР°РЅРЅС‹Рµ
-	 *
+	 * Обменивает токен на пользовательские данные
 	 * @param bool $token
-	 *
 	 * @return bool|mixed|string
 	 */
-	public static function uloginGetUserFromToken($token = false)
-	{
+	public static function uloginGetUserFromToken($token = false) {
 		$response = false;
-		if ($token)
-		{
+		if($token) {
 			$data = array('cms' => 'Bitrix', 'version' => constant('SM_VERSION'));
-			$request = 'http://ulogin.ru/token.php?token='.$token.'&host='.$_SERVER['HTTP_HOST'].'&data='.base64_encode(json_encode($data));
-			if (in_array('curl', get_loaded_extensions()))
-			{
+			$request = 'http://ulogin.ru/token.php?token=' . $token . '&host=' . $_SERVER['HTTP_HOST'] . '&data=' . base64_encode(json_encode($data));
+			if(in_array('curl', get_loaded_extensions())) {
 				$c = curl_init($request);
 				curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
 				curl_setopt($request, CURLOPT_FOLLOWLOCATION, 1);
 				$response = curl_exec($c);
 				curl_close($c);
-			}
-			elseif (function_exists('file_get_contents') && ini_get('allow_url_fopen')) $response = file_get_contents($request);
+			} elseif(function_exists('file_get_contents') && ini_get('allow_url_fopen'))
+				$response = file_get_contents($request);
 		}
+
 		return $response;
 	}
 
 	/**
-	 * Р РµРіРёСЃС‚СЂР°С†РёСЏ РЅР° СЃР°Р№С‚Рµ Рё РІ С‚Р°Р±Р»РёС†Рµ uLogin
-	 *
-	 * @param Array $u_user - РґР°РЅРЅС‹Рµ Рѕ РїРѕР»СЊР·РѕРІР°С‚РµР»Рµ, РїРѕР»СѓС‡РµРЅРЅС‹Рµ РѕС‚ uLogin
-	 * @param int $in_db - РїСЂРё Р·РЅР°С‡РµРЅРёРё 1 РЅРµРѕР±С…РѕРґРёРјРѕ РїРµСЂРµРїРёСЃР°С‚СЊ РґР°РЅРЅС‹Рµ РІ С‚Р°Р±Р»РёС†Рµ uLogin
-	 *
+	 * Регистрация на сайте и в таблице uLogin
+	 * @param Array $u_user - данные о пользователе, полученные от uLogin
+	 * @param int $in_db - при значении 1 необходимо переписать данные в таблице uLogin
 	 * @return bool|int|Error
 	 */
-	public static function RegistrationUser($u_user, $arParams)
-	{
-		if (!isset($u_user['email']))
-		{
-			ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => 'Р§РµСЂРµР· РґР°РЅРЅСѓСЋ С„РѕСЂРјСѓ РІС‹РїРѕР»РЅРёС‚СЊ СЂРµРіРёСЃС‚СЂР°С†РёСЋ РЅРµРІРѕР·РјРѕР¶РЅРѕ. РЎРѕРѕР±С‰РёС‚Рµ Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂСѓ СЃР°Р№С‚Р° Рѕ СЃР»РµРґСѓСЋС‰РµР№ РѕС€РёР±РєРµ:
-            РќРµРѕР±С…РѕРґРёРјРѕ СѓРєР°Р·Р°С‚СЊ "email" РІ РІРѕР·РІСЂР°С‰Р°РµРјС‹С… РїРѕР»СЏС… uLogin'));
-			die('<br/><a href="'.$_POST['backurl'].'">РќР°Р·Р°Рґ</a>');
+	public static function RegistrationUser($u_user, $arParams) {
+		if(!isset($u_user['email'])) {
+			ShowMessage(array("TYPE" => "ERROR", "MESSAGE" => GetMessage('ULOGIN_ERROR_EMAIL')));
+			die('<br/><a href="' . $_POST['backurl'] . '">' . GetMessage('ULOGIN_BACK') . '</a>');
 		}
 		global $USER;
 		global $DB;
-		// РґР°РЅРЅС‹Рµ Рѕ РїРѕР»СЊР·РѕРІР°С‚РµР»Рµ РѕС‚СЃСѓС‚СЃС‚РІСѓСЋС‚ РІ b_users
+		// данные о пользователе отсутствуют в b_users
 		$rsUsers = CUser::GetList(($by = "id"), ($order = "desc"), array("EMAIL" => $u_user['email'], "ACTIVE" => "Y"));
 		$arUser = $rsUsers->GetNext();
-//		// $check_m_user == true -> РµСЃС‚СЊ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ СЃ С‚Р°РєРёРј email
+//		// $check_m_user == true -> есть пользователь с таким email
 		$check_m_user = $arUser['ID'] > 0 ? true : false;
 		$current_user = $USER->GetID();
-		if ($check_m_user)
-		{
-			if (!isset($u_user["verified_email"]) || intval($u_user["verified_email"]) != 1)
-			{
-				die('<script src="//ulogin.ru/js/ulogin.js"  type="text/javascript"></script><script type="text/javascript">uLogin.mergeAccounts("'.$_POST['token'].'")</script>'.'Р­Р»РµРєС‚СЂРѕРЅРЅС‹Р№ Р°РґСЂРµСЃ РґР°РЅРЅРѕРіРѕ Р°РєРєР°СѓРЅС‚Р° СЃРѕРІРїР°РґР°РµС‚ СЃ СЌР»РµРєС‚СЂРѕРЅРЅС‹Рј Р°РґСЂРµСЃРѕРј СЃСѓС‰РµСЃС‚РІСѓСЋС‰РµРіРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ. РўСЂРµР±СѓРµС‚СЃСЏ РїРѕРґС‚РІРµСЂР¶РґРµРЅРёРµ РЅР° РІР»Р°РґРµРЅРёРµ СѓРєР°Р·Р°РЅРЅС‹Рј email.'.'<br/><a href="'.$_POST['backurl'].'">РќР°Р·Р°Рґ</a>');
+		if($check_m_user) {
+			if(!isset($u_user["verified_email"]) || intval($u_user["verified_email"]) != 1) {
+				die('<script src="//ulogin.ru/js/ulogin.js"  type="text/javascript"></script><script type="text/javascript">uLogin.mergeAccounts("' . $_POST['token'] . '")</script>' . GetMessage('ULOGIN_ERROR_SYNC_CONFIRM') . '<br/><a href="' . $_POST['backurl'] . '">' . GetMessage('ULOGIN_BACK') . '</a>');
 			}
-			if (intval($u_user["verified_email"]) == 1)
-			{
+			if(intval($u_user["verified_email"]) == 1) {
 				$user_id = $current_user;
-				$other_u = $DB->Query('SELECT identity,network FROM ulogin_users WHERE userid = "'.$user_id.'"');
+				$other_u = $DB->Query('SELECT identity,network FROM ulogin_users WHERE userid = "' . $user_id . '"');
 				$other = array();
-				while ($row = $other_u->Fetch())
-				{
+				while($row = $other_u->Fetch()) {
 					$ident = $row['identity'];
 					$key = $row['network'];
 					$other[$key] = $ident;
 				}
-				if ($other)
-				{
-					if (!isset($u_user['merge_account']))
-					{
-						die('<script src="//ulogin.ru/js/ulogin.js"  type="text/javascript"></script><script type="text/javascript">uLogin.mergeAccounts("'.$_POST['token'].'","'.$other[$key].'")</script>'.'РЎ РґР°РЅРЅС‹Рј Р°РєРєР°СѓРЅС‚РѕРј СѓР¶Рµ СЃРІСЏР·Р°РЅС‹ РґР°РЅРЅС‹Рµ РёР· РґСЂСѓРіРѕР№ СЃРѕС†РёР°Р»СЊРЅРѕР№ СЃРµС‚Рё. РўСЂРµР±СѓРµС‚СЃСЏ РїСЂРёРІСЏР·РєР° РЅРѕРІРѕР№ СѓС‡С‘С‚РЅРѕР№ Р·Р°РїРёСЃРё СЃРѕС†РёР°Р»СЊРЅРѕР№ СЃРµС‚Рё Рє СЌС‚РѕРјСѓ Р°РєРєР°СѓРЅС‚Сѓ'.'<br/><a href="'.$_POST['backurl'].'">РќР°Р·Р°Рґ</a>');
+				if($other) {
+					if(!isset($u_user['merge_account'])) {
+						die('<script src="//ulogin.ru/js/ulogin.js"  type="text/javascript"></script><script type="text/javascript">uLogin.mergeAccounts("' . $_POST['token'] . '","' . $other[$key] . '")</script>' . GetMessage('ULOGIN_ERROR_SYNC_MERGE') . '<br/><a href="' . $_POST['backurl'] . '">' . GetMessage('ULOGIN_BACK') . '</a>');
 					}
 				}
 			}
-			$result = $DB->Query('INSERT INTO ulogin_users (id, userid, identity, network) VALUES (NULL,"'.$current_user.'","'.urlencode($u_user['identity']).'","'.$u_user['network'].'")');
+			$result = $DB->Query('INSERT INTO ulogin_users (id, userid, identity, network) VALUES (NULL,"' . $current_user . '","' . urlencode($u_user['identity']) . '","' . $u_user['network'] . '")');
 			$result = $result->GetNext();
+
 			return $result['id'];
 		} else {
-			$result = $DB->Query('INSERT INTO ulogin_users (id, userid, identity, network) VALUES (NULL,"'.$current_user.'","'.urlencode($u_user['identity']).'","'.$u_user['network'].'")');
+			$result = $DB->Query('INSERT INTO ulogin_users (id, userid, identity, network) VALUES (NULL,"' . $current_user . '","' . urlencode($u_user['identity']) . '","' . $u_user['network'] . '")');
 			$result = $result->GetNext();
+
 			return $result['id'];
 		}
 	}
 
 	/**
-	 * РћР±РЅРѕРІР»РµРЅРёРµ РґР°РЅРЅС‹С… Рѕ РїРѕР»СЊР·РѕРІР°С‚РµР»Рµ Рё РІС…РѕРґ
-	 *
-	 * @param $u_user - РґР°РЅРЅС‹Рµ Рѕ РїРѕР»СЊР·РѕРІР°С‚РµР»Рµ, РїРѕР»СѓС‡РµРЅРЅС‹Рµ РѕС‚ uLogin
-	 * @param $id_customer - РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
-	 *
+	 * Обновление данных о пользователе и вход
+	 * @param $u_user - данные о пользователе, полученные от uLogin
+	 * @param $id_customer - идентификатор пользователя
 	 * @return string
 	 */
-	public function loginUser($u_user, $id_customer)
-	{
+	public function loginUser($u_user, $id_customer) {
 		global $USER;
-		//Р°РІС‚РѕСЂРёР·СѓРµРј РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
-		//РґРѕРїРёСЃР°С‚СЊ РїСЂРѕРІРµСЂРєСѓ РёР·РјРµРЅРµРЅРёСЏ РґР°РЅРЅС‹С…
+		//авторизуем пользователя
+		//дописать проверку изменения данных
 		$USER->Authorize($id_customer);
 	}
 
 	/**
-	 * Р’С‹РІРѕРґ СЃРїРёСЃРєР° Р°РєРєР°СѓРЅС‚РѕРІ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
-	 *
-	 * @param int $user_id - ID РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ (РµСЃР»Рё РЅРµ Р·Р°РґР°РЅ - С‚РµРєСѓС‰РёР№ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ)
-	 *
+	 * Вывод списка аккаунтов пользователя
+	 * @param int $user_id - ID пользователя (если не задан - текущий пользователь)
 	 * @return string
 	 */
-	static function getuLoginUserAccountsPanel($user_id = 0)
-	{
+	static function getuLoginUserAccountsPanel($user_id = 0) {
 		global $USER;
 		global $DB;
 		$current_user = $USER->GetID();
 		$user_id = empty($user_id) ? $current_user : $user_id;
-		if (empty($user_id)) return '';
-		$results = $DB->Query('SELECT * FROM ulogin_users  WHERE  userid= "'.$user_id.'"');
+		if(empty($user_id))
+			return '';
+		$results = $DB->Query('SELECT * FROM ulogin_users  WHERE  userid= "' . $user_id . '"');
 		$networks = array();
-		while ($row = $results->Fetch())
-		{
+		while($row = $results->Fetch()) {
 			$key = $row['network'];
 			$value = $row['identity'];
 			$networks[$key] = $value;
 		}
 		$output = '';
-		if ($networks)
-		{
+		if($networks) {
 			$output .= '<div id="ulogin_accounts">';
-			foreach ($networks as $key => $network)
-			{
+			foreach($networks as $key => $network) {
 				$output .= "<div data-ulogin-network='{$key}'  data-ulogin-identity='{$network}' class='ulogin_network big_provider {$key}_big'></div>";
 			}
 			$output .= '</div><div style="clear: both"></div>';
+
 			return $output;
 		}
+
 		return '';
 	}
 }
 
 ?>
-
