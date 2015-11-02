@@ -4,7 +4,7 @@ Donate link: [https://ulogin.ru](https://ulogin.ru "https://ulogin.ru")
 Tags: ulogin, login, social, authorization  
 Requires at least: 11.0.0  
 Tested up to: 15.5.1  
-Stable tag: 2.0.2  
+Stable tag: 2.0.3  
 License: GNU General Public License, version 2  
 
 **uLogin** — это инструмент, который позволяет пользователям получить единый доступ к различным Интернет-сервисам без необходимости повторной регистрации,
@@ -90,6 +90,9 @@ License: GNU General Public License, version 2
 
 
 ## Изменения
+
+#### 2.0.3.
+ - Исправлена ошибка с именем базы данных uLogin_users
 
 #### 2.0.2.
  - Улучшена совместимость со старой версией плагина.
