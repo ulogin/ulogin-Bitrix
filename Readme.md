@@ -91,6 +91,12 @@ License: GNU General Public License, version 2
 
 ## Изменения
 
+#### 2.0.5.
+ - Исправлена ошибка с подключением файла ulogin.class.php
+
+#### 2.0.4.
+ - Исправлена ошибка с подключением файла Ulogin.class.php
+
 #### 2.0.3.
  - Исправлена ошибка с именем базы данных uLogin_users
 
