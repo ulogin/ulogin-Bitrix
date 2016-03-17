@@ -235,22 +235,7 @@ class Ulogin {
 				$arIMAGE["MODULE_ID"] = "main";
 			}
 			$user = new CUser;
-			$arFields = array(
-						"NAME" => $u_user['first_name'],
-						"LAST_NAME" => $u_user['last_name'],
-						"EMAIL" => $u_user['email'],
-						"LOGIN" => $longLogin,
-						"ACTIVE" => "Y",
-						"GROUP_ID" => $GroupID,
-						"PASSWORD" => $passw,
-						"CONFIRM_PASSWORD" => $passw,
-						"PERSONAL_PHOTO" => $arIMAGE,
-						"PERSONAL_GENDER" => $u_user['sex'] == 2 ? 'M' : 'F',
-						"PERSONAL_CITY" => isset($u_user['city']) ? $u_user['city'] : '',
-						"PERSONAL_BIRTHDAY" => $u_user['bdate'],
-						"PERSONAL_PHONE" => isset($u_user['phone']) ? $u_user['phone'] : '',
-						"PERSONAL_COUNTRY" => isset($u_user['country']) ? $u_user['country'] : '',
-					);
+			$arFields = array("NAME" => $u_user['first_name'], "LAST_NAME" => $u_user['last_name'], "EMAIL" => $u_user['email'], "LOGIN" => $longLogin, "ACTIVE" => "Y", "GROUP_ID" => array(5), "PASSWORD" => $passw, "CONFIRM_PASSWORD" => $passw, "PERSONAL_PHOTO" => $arIMAGE, 'PERSONAL_GENDER' => $u_user['sex'] == 2 ? 'M' : 'F', 'PERSONAL_CITY' => isset($u_user['city']) ? $u_user['city'] : '', 'PERSONAL_BIRTHDAY' => $u_user['bdate'], 'PERSONAL_PHONE' => isset($u_user['phone']) ? $u_user['phone'] : '', 'PERSONAL_COUNTRY' => isset($u_user['country']) ? $u_user['country'] : '',);
 			if($arParams['SOCIAL_LINK'] == 'Y') {
 				$arFields['PERSONAL_WWW'] = isset($u_user['profile']) ? $u_user['profile'] : '';
 			}
