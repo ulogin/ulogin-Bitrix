@@ -91,6 +91,9 @@ License: GNU General Public License, version 2
 
 ## Изменения
 
+#### 2.1.6.
+ - Добавлено сохранение nickname пользователя в поле SECOND_NAME
+
 #### 2.1.5.
  - Исправление ошибок предыдущих версий
 
