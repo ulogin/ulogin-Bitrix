@@ -4,7 +4,7 @@ Donate link: [https://ulogin.ru](https://ulogin.ru "https://ulogin.ru")
 Tags: ulogin, login, social, authorization  
 Requires at least: 11.0.0  
 Tested up to: 15.5.10  
-Stable tag: 2.1.5  
+Stable tag: 2.1.7  
 License: GNU General Public License, version 2  
 
 **uLogin** — это инструмент, который позволяет пользователям получить единый доступ к различным Интернет-сервисам без необходимости повторной регистрации,
@@ -90,6 +90,9 @@ License: GNU General Public License, version 2
 
 
 ## Изменения
+
+#### 2.1.7.
+ - Добавлено сохранение большой фотографии пользователя, если она получена
 
 #### 2.1.6.
  - Добавлено сохранение nickname пользователя в поле SECOND_NAME
