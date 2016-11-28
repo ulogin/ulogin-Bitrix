@@ -155,7 +155,7 @@ class ULoginSync {
 	 * Проверка существует ли пользователь с заданным логином
 	 */
 	public function ulogin_userExist($login) {
-		$loginUsers = CUser::GetList(($by = "id"), ($order = "desc"), array("LOGIN" => $login, "ACTIVE" => "Y")); //$login
+		$loginUsers = CUser::GetList(($by = "id"), ($order = "desc"), array("LOGIN" => $login)); //$login
 		if($loginUsers->SelectedRowsCount() > 0) {
 		    return true;
 		}
