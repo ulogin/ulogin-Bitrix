@@ -3,8 +3,8 @@
 Donate link: [https://ulogin.ru](https://ulogin.ru "https://ulogin.ru")  
 Tags: ulogin, login, social, authorization  
 Requires at least: 11.0.0  
-Tested up to: 16.5.8  
-Stable tag: 2.1.12  
+Tested up to: 21.400.300  
+Stable tag: 2.1.13  
 License: GNU General Public License, version 2  
 
 **uLogin** — это инструмент, который позволяет пользователям получить единый доступ к различным Интернет-сервисам без необходимости повторной регистрации,
@@ -90,6 +90,9 @@ License: GNU General Public License, version 2
 
 
 ## Изменения
+
+#### 2.1.13.
+ - Улучшена совместимость плагина с версиями 1С-Битрикс выше v16.5.8
 
 #### 2.1.12.
  - Исправлена кодировка поля "город". Исправлена ошибка в алгоритме генерации имени пользователя.
